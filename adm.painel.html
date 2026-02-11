@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo.iconi.ico" type="image/x-icon">
+    <title>Painel Admin - Studio Mônica Camargo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* ================= TELA DE CARREGAMENTO (RESTAURADA) ================= */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #e8e8e8; /* Cor cinza original */
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        
+        /* Logo na tela de carregamento */
+        .loader-logo {
+            width: 150px; margin-bottom: 20px; filter: grayscale(1); opacity: 0.3;
+        }
+
+        .spinner { width: 80px; height: 80px; border: 3px solid rgba(212, 175, 55, 0.1); border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; }
+        
+        .loader-text {
+            margin-top: 15px; font-family: 'Poppins', sans-serif; color: #333;
+            font-size: 12px; letter-spacing: 2px; font-weight: bold; text-transform: uppercase;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader-hidden { opacity: 0; visibility: hidden; }
+
+        /* ================= ESTILO GERAL COM LOGO NO FUNDO ================= */
+        body { 
+            margin: 0; font-family: 'Poppins', sans-serif; color: #fff; min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url("Studio Beauty Mônica Camargo.png"); 
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+
+        header { 
+            background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(10px);
+            padding: 20px 5%; border-bottom: 1px solid #d4af37; 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; z-index: 100; 
+        }
+
+        h1 { font-family: 'Playfair Display', serif; color: #d4af37; font-size: 20px; margin: 0; }
+        .container { padding: 40px 5%; }
+        .section-title { border-left: 4px solid #d4af37; padding-left: 15px; margin: 40px 0 20px; text-transform: uppercase; letter-spacing: 1px; color: #d4af37; }
+
+        /* ================= PAINEL DE GESTÃO ================= */
+        .block-panel { background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 15px; border: 1px dashed #d4af37; margin-bottom: 25px; }
+        .block-panel label { display: block; font-size: 11px; color: #d4af37; margin-bottom: 5px; text-transform: uppercase; }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        
+        select, .custom-input { 
+            width: 100%; padding: 10px; background: rgba(0,0,0,0.7); border: 1px solid #444; 
+            border-radius: 5px; color: #fff; height: 42px; cursor: pointer; font-family: 'Poppins', sans-serif; box-sizing: border-box;
+        }
+
+        .table-responsive { overflow-x: auto; margin-bottom: 50px; background: rgba(26, 26, 26, 0.8); border-radius: 15px; border: 1px solid #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; font-size: 14px; }
+        th { background: #d4af37; color: #000; }
+
+        .status-pendente { color: #f1c40f; font-weight: bold; }
+        .status-confirmado { color: #2ecc71; font-weight: bold; }
+        .status-bloqueado { color: #ff4d4d; font-style: italic; font-weight: bold; }
+
+        /* ================= CARDS DE SERVIÇOS ================= */
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .edit-card { background: rgba(26, 26, 26, 0.8); border: 1px solid #333; padding: 20px; border-radius: 15px; transition: 0.3s; }
+        .price-group { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid #333; margin: 15px 0; }
+        .row-item { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+        
+        .btn-action { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-confirm { background: #28a745; color: white; margin-right: 5px; }
+        .btn-cancel { background: #dc3545; color: white; }
+        .btn-save { width: 100%; padding: 12px; background: #d4af37; border: none; border-radius: 5px; color: #000; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .btn-add-sub { background: transparent; border: 1px dashed #d4af37; color: #d4af37; width: 100%; padding: 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <img src="Studio Beauty Mônica Camargo.png" class="loader-logo" alt="Logo">
+        <div class="spinner"></div>
+        <div class="loader-text">Acesso Restrito - Studio Mônica Camargo</div>
+    </div>
+
+    <header>
+        <h1>PAINEL ADMIN - MÔNICA</h1>
+        <nav><a href="index.html" style="color: #dc3545; text-decoration: none; font-weight: bold;">Voltar</a></nav>
+    </header>
+
+    <div class="container">
+        <h3 class="section-title">Agenda e Bloqueios</h3>
+        
+        <div class="block-panel">
+            <p style="margin-top:0; color:#d4af37; font-weight:bold;">📝 MARCAR CLIENTE OU BLOQUEAR DIA/HORA</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                <div style="flex: 1; min-width: 140px;"><label>Data</label><input type="date" id="data-bloqueio" class="custom-input"></div>
+                <div style="flex: 0.5; min-width: 80px; text-align: center; margin-bottom: 10px;">
+                    <label>Dia Todo?</label>
+                    <input type="checkbox" id="dia-inteiro" style="transform: scale(1.2); cursor: pointer;">
+                </div>
+                <div style="flex: 1; min-width: 140px;"><label>Horário</label>
+                    <select id="hora-bloqueio">
+                        <option value="">Escolha...</option>
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>   
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="13:00">13:00</option>
+                        <option value="13:30">13:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="16:00">16:00</option>
+                        <option value="16:30">16:30</option>
+                        <option value="17:00">17:00</option>
+                        <option value="17:30">17:30</option>
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                    </select>
+                </div>
+                <div style="flex: 2; min-width: 200px;"><label>Nome / Motivo</label><input type="text" id="motivo-bloqueio" class="custom-input" placeholder="Ex: Ana Silva"></div>
+                <div style="flex: 2; min-width: 200px;"><label>Serviço</label><input type="text" id="servico-manual" class="custom-input" placeholder="Ex: Manicure"></div>
+                <div style="display: flex; gap: 5px;">
+                    <button onclick="bloquearManual('Agendado')" class="btn-action" style="background:#28a745; color:white; height:42px;">AGENDAR</button>
+                    <button onclick="bloquearManual('Bloqueado')" class="btn-action" style="background:#d4af37; color:#000; height:42px;">BLOQUEAR</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr><th>Cliente / Motivo</th><th>Serviço</th><th>Data/Hora</th><th>Status</th><th>Ações</th></tr>
+                </thead>
+                <tbody id="agenda-corpo">
+                    <tr id="item-ex">
+                        <td>👤 Ana Silva</td><td>Cabelo + Unha</td><td>12/02 - 14:00</td><td class="status-pendente" id="status-ex">Pendente</td>
+                        <td>
+                            <button class="btn-action btn-confirm" onclick="atualizarStatus('ex')">✔</button>
+                            <button class="btn-action btn-cancel" onclick="this.parentElement.parentElement.remove()">✘</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-title">Gerenciar Serviços e Preços</h3>
+        <div class="admin-grid" id="grid-servicos">
+            <div class="edit-card">
+                <label style="color:#aaa; font-size:11px;">CATEGORIA</label>
+                <input type="text" value="Manicure" class="custom-input">
+                <div class="price-group">
+                    <div id="sub-manicure">
+                        <div class="row-item">
+                            <input type="text" value="Unha Básica" style="flex:2;" class="custom-input"><input type="text" value="50,00" style="flex:1;" class="custom-input"><input type="text" value="45 min" style="flex:1;" class="custom-input">
+                            <button class="btn-action btn-cancel" onclick="this.parentElement.remove()">✘</button>
+                        </div>
+                    </div>
+                    <button class="btn-add-sub" onclick="addLinha('sub-manicure')">+ Adicionar Item</button>
+                </div>
+                <button class="btn-save" onclick="alert('Salvo!')">Salvar Categoria</button>
+            </div>
+
+            <div class="edit-card" onclick="novaCategoria()" style="border: 2px dashed #d4af37; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(212, 175, 55, 0.05);">
+                <span style="font-size: 40px; color: #d4af37;">+</span>
+                <p style="color:#d4af37; font-weight: bold;">CRIAR NOVA CATEGORIA</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function atualizarStatus(id) {
+            const st = document.getElementById('status-'+id);
+            st.innerText = "Confirmado"; st.className = "status-confirmado";
+            alert("Agendamento Confirmado!");
+        }
+
+        function bloquearManual(tipo) {
+            const data = document.getElementById('data-bloqueio').value;
+            const hora = document.getElementById('hora-bloqueio').value;
+            const motivo = document.getElementById('motivo-bloqueio').value;
+            const servico = document.getElementById('servico-manual').value || "---";
+            const diaInteiro = document.getElementById('dia-inteiro').checked;
+            if(!data || !motivo) return alert("Preencha Data e Nome!");
+            if(!diaInteiro && !hora) return alert("Escolha o horário!");
+            const dataParts = data.split('-');
+            const dataFormatada = dataParts[2] + '/' + dataParts[1];
+            const horaExibida = diaInteiro ? "DIA TODO" : hora;
+            const id = Date.now();
+            const tr = document.createElement('tr');
+            tr.id = 'item-'+id;
+            tr.innerHTML = `<td>${tipo === 'Agendado' ? '👤' : '🚫'} ${motivo}</td><td>${diaInteiro ? '---' : servico}</td><td>${dataFormatada} - ${horaExibida}</td><td class="${tipo === 'Agendado' ? 'status-confirmado' : 'status-bloqueado'}">${diaInteiro ? 'OFF' : tipo.toUpperCase()}</td><td><button class="btn-action btn-cancel" onclick="this.parentElement.parentElement.remove()">✘</button></td>`;
+            document.getElementById('agenda-corpo').prepend(tr);
+            document.getElementById('motivo-bloqueio').value = ""; document.getElementById('servico-manual').value = "";
+        }
+
+        function addLinha(id) {
+            const div = document.createElement('div');
+            div.className = 'row-item';
+            div.innerHTML = `<input type="text" placeholder="Serviço" style="flex:2;" class="custom-input"><input type="text" placeholder="R$" style="flex:1;" class="custom-input"><input type="text" placeholder="Tempo" style="flex:1;" class="custom-input"><button class="btn-action btn-cancel" onclick="this.parentElement.remove()">✘</button>`;
+            document.getElementById(id).appendChild(div);
+        }
+
+        function novaCategoria() {
+            const id = Date.now();
+            const card = document.createElement('div');
+            card.className = 'edit-card';
+            card.innerHTML = `<label style="color:#aaa; font-size:11px;">NOVA CATEGORIA</label><input type="text" placeholder="Nome" class="custom-input"><div class="price-group"><div id="sub-${id}"></div><button class="btn-add-sub" onclick="addLinha('sub-${id}')">+ Item</button></div><button class="btn-save" onclick="alert('Salvo!')">Salvar</button><button onclick="this.parentElement.remove()" style="background:none; border:none; color:red; cursor:pointer; width:100%; margin-top:10px;">Excluir</button>`;
+            document.getElementById('grid-servicos').insertBefore(card, document.getElementById('grid-servicos').lastElementChild);
+        }
+
+        window.addEventListener("load", () => {
+            setTimeout(() => { document.getElementById("loader").classList.add("loader-hidden"); }, 800);
+        });
+    </script>
+</body>
+</html>

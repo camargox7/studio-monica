@@ -9,12 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ================= TELA DE CARREGAMENTO AJUSTADA ================= */
+        /* ================= TELA DE CARREGAMENTO ================= */
         #loader {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: #e8e8e8; /* Branco mais escuro sólido */
+            background-color: #e8e8e8;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,13 +33,12 @@
             align-items: center;
         }
 
-        /* Logo ocupando o fundo completo */
         .loader-logo-bg {
             position: absolute;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Faz a logo preencher a tela toda */
-            opacity: 1; /* Logo completa, sem ser marca d'água sutil */
+            object-fit: cover;
+            opacity: 1;
             z-index: -1;
         }
 
@@ -50,7 +49,7 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
-            background: rgba(232, 232, 232, 0.6); /* Fundo leve no spinner para leitura */
+            background: rgba(232, 232, 232, 0.6);
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
 
@@ -60,7 +59,7 @@
             font-size: 16px;
             letter-spacing: 5px;
             text-transform: uppercase;
-            background: rgba(232, 232, 232, 0.6); /* Fundo leve no texto para leitura */
+            background: rgba(232, 232, 232, 0.6);
             padding: 5px 15px;
             border-radius: 5px;
         }
@@ -68,7 +67,118 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loader-hidden { opacity: 0; visibility: hidden; }
 
-        /* ================= SEU CÓDIGO ORIGINAL ABAIXO (MANTIDO) ================= */
+        /* ================= MENU LATERAL ================= */
+        .menu-sidebar {
+            position: fixed;
+            top: 0; right: -280px;
+            width: 280px; height: 100%;
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            transition: 0.4s ease-in-out;
+            padding: 40px 20px;
+            border-left: 1px solid #d4af37;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-sidebar.active { right: 0; }
+
+        .menu-btn-close {
+            align-self: flex-end;
+            font-size: 30px;
+            color: #d4af37;
+            cursor: pointer;
+        }
+
+        .menu-sidebar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: 0.3s;
+        }
+
+        .menu-sidebar a:hover {
+            color: #d4af37;
+            padding-left: 15px;
+        }
+
+        /* Destaque especial para Administração */
+        .menu-admin {
+            color: #ffffff !important;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            z-index: 999;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background-color: #d4af37;
+            border-radius: 2px;
+        }
+
+        /* ================= MODAL (POP-UP) ATUALIZADO ================= */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            width: 90%; max-width: 500px;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #d4af37;
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-close {
+            position: absolute; top: 15px; right: 20px; color: #d4af37; font-size: 28px; cursor: pointer;
+        }
+
+        .modal h2 { font-family: 'Playfair Display', serif; color: #d4af37; margin-bottom: 15px; }
+        
+        .price-list {
+            text-align: left;
+            margin: 20px 0;
+            color: #ccc;
+        }
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .price-value { color: #d4af37; font-weight: bold; }
+
+        /* ================= SEU CÓDIGO ORIGINAL (MANTIDO) ================= */
         :root {
             --gold-main: #d4af37;
             --gold-light: #f5e6a8;
@@ -76,11 +186,7 @@
             --bg-overlay: rgba(0, 0, 0, 0.8);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             min-height: 100vh;
@@ -88,6 +194,7 @@
             background-color: #ffffff;
             color: #fff;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         .background-animated {
@@ -125,44 +232,14 @@
             letter-spacing: 1px;
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        .user-info { display: flex; align-items: center; gap: 15px; }
 
-        .btn-logout {
-            color: var(--gold-light);
-            text-decoration: none;
-            font-size: 14px;
-            border: 1px solid var(--gold-main);
-            padding: 5px 15px;
-            border-radius: 20px;
-            transition: 0.3s;
-        }
+        main { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
 
-        .btn-logout:hover {
-            background: var(--gold-main);
-            color: #000;
-        }
-
-        main {
-            padding: 40px 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .welcome-text {
-            margin-bottom: 40px;
-        }
-
-        .welcome-text h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 36px;
-            color: var(--gold-main);
-        }
+        .welcome-text h2 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold-main); }
 
         .section-title {
+            margin-top: 40px;
             margin-bottom: 20px;
             border-left: 4px solid var(--gold-main);
             padding-left: 15px;
@@ -186,6 +263,7 @@
             border-radius: 15px;
             text-align: center;
             transition: 0.4s;
+            cursor: pointer;
         }
 
         .service-card:hover {
@@ -194,24 +272,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        .service-card h3 {
-            margin-bottom: 10px;
-            color: var(--gold-light);
-        }
-
-        .service-card p {
-            font-size: 14px;
-            color: #ccc;
-            margin-bottom: 15px;
-        }
-
-        .price {
-            display: block;
-            font-weight: bold;
-            color: var(--gold-main);
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
+        .price { display: block; font-weight: bold; color: var(--gold-main); font-size: 18px; margin-bottom: 15px; }
 
         .booking-container {
             background: rgba(15, 15, 15, 0.9);
@@ -223,52 +284,47 @@
             gap: 30px;
         }
 
-        @media (max-width: 768px) {
-            .booking-container { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 768px) { .booking-container { grid-template-columns: 1fr; } }
 
-        .booking-form label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--gold-light);
-            font-size: 14px;
-        }
+        .booking-form label { display: block; margin-bottom: 10px; color: var(--gold-light); font-size: 14px; }
 
         .booking-form select, .booking-form input {
-            width: 100%;
-            padding: 12px;
-            background: #000;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            border-radius: 8px;
-            color: #fff;
-            margin-bottom: 20px;
-            outline: none;
+            width: 100%; padding: 12px; background: #000; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 8px; color: #fff; margin-bottom: 20px; outline: none;
         }
 
         .btn-confirm {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, var(--gold-strong), var(--gold-main));
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
+            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--gold-strong), var(--gold-main)); border: none; border-radius: 8px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.3s;
         }
 
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            cursor: pointer;
-            filter: invert(100%) brightness(100%);
-        }
+        input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(100%) brightness(100%); }
     </style>
 </head>
 <body>
 
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <div class="menu-sidebar" id="sidebar">
+        <span class="menu-btn-close" id="closeMenu">×</span>
+        <a href="#servicos">Nossos Serviços</a>
+        <a href="#agendar">Agendar Horário</a>
+        <a href="compromiso.html">Meus Agendamentos</a>
+        <a href="adm.login.html" class="menu-admin">Administração</a>
+        <a href="login.html">Fazer Login</a>
+        <a href="login.html" style="color: #ff4d4d; border-top: 1px solid rgba(255,0,0,0.2); margin-top: 20px;">Sair</a>
+    </div>
+
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">×</span>
+            <h2 id="modalTitle">Nome do Serviço</h2>
+            <div id="modalBody" class="price-list">
+                </div>
+            <button class="btn-confirm" style="margin-top: 20px; color: #000;" onclick="closeModalAndGo()">Agendar agora</button>
+        </div>
+    </div>
+
     <div id="loader">
         <div class="loader-content">
             <img src="Studio Beauty Mônica Camargo.png" class="loader-logo-bg" alt="Logo">
-            
             <div class="spinner"></div>
             <h1 class="loader-text">STUDIO BEAUTY</h1>
         </div>
@@ -280,7 +336,9 @@
         <h1>STUDIO MÔNICA CAMARGO</h1>
         <div class="user-info">
             <span>Olá, <strong>Mônica</strong></span>
-            <a href="login.html" class="btn-logout">Sair</a>
+            <div class="hamburger" id="openMenu">
+                <span></span><span></span><span></span>
+            </div>
         </div>
     </header>
 
@@ -290,41 +348,51 @@
             <p>Escolha o serviço desejado e agende seu momento de cuidado.</p>
         </section>
 
-        <h3 class="section-title">Nossos Serviços</h3>
+        <h3 class="section-title" id="servicos">Nossos Serviços</h3>
         <div class="services-grid">
-            <div class="service-card">
+            
+            <div class="service-card" onclick="openModal('Cabelo', '<div class=\'price-item\'><span>Corte e Tratamento</span><span class=\'price-value\'>R$ 80,00</span></div>')">
                 <h3>Cabelo</h3>
-                <p>Corte, coloração e tratamentos intensivos.</p>
+                <p>Toque para ver detalhes</p>
                 <span class="price">A partir de R$ 80</span>
             </div>
-            <div class="service-card">
+
+            <div class="service-card" onclick="openModal('Manicure', 
+                '<div class=\'price-item\'><span>Unha Básica</span><span class=\'price-value\'>R$ 50,00</span></div>' +
+                '<div class=\'price-item\'><span>Unha em Gel</span><span class=\'price-value\'>R$ 60,00</span></div>' +
+                '<div class=\'price-item\'><span>Pé</span><span class=\'price-value\'>R$ 55,00</span></div>' +
+                '<div class=\'price-item\'><span>Pé e Mão</span><span class=\'price-value\'>R$ 90,00</span></div>')">
                 <h3>Manicure</h3>
-                <p>Unhas em gel, fibra de vidro e esmaltação.</p>
+                <p>Toque para ver detalhes</p>
                 <span class="price">A partir de R$ 50</span>
             </div>
-            <div class="service-card">
+
+            <div class="service-card" onclick="openModal('Sobrancelhas', '<div class=\'price-item\'><span>Design Simples</span><span class=\'price-value\'>R$ 40,00</span></div>')">
                 <h3>Sobrancelhas</h3>
-                <p>Design personalizado e micropigmentação.</p>
+                <p>Toque para ver detalhes</p>
                 <span class="price">A partir de R$ 40</span>
             </div>
-            <div class="service-card">
+
+            <div class="service-card" onclick="openModal('Depilação', '<div class=\'price-item\'><span>Maquiagem / Eventos</span><span class=\'price-value\'>R$ 150,00</span></div>')">
                 <h3>Depilação</h3>
-                <p>Maquiagem profissional para eventos e noivas.</p>
+                <p>Toque para ver detalhes</p>
                 <span class="price">A partir de R$ 150</span>
             </div>
-             <div class="service-card">
+
+             <div class="service-card" onclick="openModal('Cílios', '<div class=\'price-item\'><span>Extensão de Cílios</span><span class=\'price-value\'>R$ 150,00</span></div>')">
                 <h3>cílios</h3>
-                <p>Maquiagem profissional para eventos e noivas.</p>
+                <p>Toque para ver detalhes</p>
                 <span class="price">A partir de R$ 150</span>
             </div>
-            <div class="service-card">
+
+            <div class="service-card" onclick="openModal('Pacotes', '<div class=\'price-item\'><span>Pacotes Especiais</span><span class=\'price-value\'>Sob Consulta</span></div>')">
                 <h3>Pacotes</h3>
-                <p>Maquiagem profissional para eventos e noivas.</p>
+                <p>Toque para ver detalhes</p>
                 <span class="price">A partir de R$ 150</span>
             </div>
         </div>
 
-        <h3 class="section-title">Agende um Horário</h3>
+        <h3 class="section-title" id="agendar">Agende um Horário</h3>
         <div class="booking-container">
             <div class="booking-form">
                 <label>Selecione o Serviço</label>
@@ -349,17 +417,20 @@
                     <option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option>
                     <option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option>
                     <option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option>
-                    <option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option>
+                    <option>18:00</option><option>18:30</option><option>19:00</option>
                 </select>
 
-                <button class="btn-confirm"><a href="login.html" style="color:white; text-decoration:none;">Agendar horário</a></button>
+                <p style="color: var(--gold-light); font-size: 12px; margin-bottom: 10px; text-align: center;">É necessário estar logada para confirmar o agendamento.</p>
+                <a href="login.html" style="text-decoration: none;">
+                    <button class="btn-confirm" type="button" style="color: #000; width: 100%;">Fazer login para agendar</button>
+                </a>
             </div>
 
             <div style="color: #ccc; font-size: 14px; line-height: 1.6;">
                 <p><strong>Aviso importante:</strong></p>
                 <p>Os agendamentos devem ser feitos com no mínimo 24h de antecedência.</p>
                 <br>
-                <p>📞 <strong>WhatsApp: </strong><a href="https://wa.me/5511974688863">(11) 97468-8863</a></p>
+                <p>📞 <strong>WhatsApp: </strong><a href="https://wa.me/5511974688863" style="color: #d4af37; text-decoration: none;">(11) 97468-8863</a></p>
                 <p>⏰ <strong>Horário:</strong> Segunda a Sábado, 07h às 19h.</p>
                 
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d914.5000656310609!2d-46.9284041303783!3d-23.53249296910587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf042725f2e5cd%3A0x34c6ae739553e4d2!2sR.%20Astral%2C%2098%20-%20Parque%20Boa%20Esperanca%2C%20Itapevi%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1770680592999!5m2!1spt-BR!2sbr" width="100%" height="250" style="border:0; border-radius:10px;" allowfullscreen="" loading="lazy"></iframe>
@@ -368,13 +439,48 @@
     </main>
 
     <script>
+        // Loader
         window.addEventListener("load", function () {
             const loader = document.getElementById("loader");
             setTimeout(() => {
                 loader.classList.add("loader-hidden");
             }, 800);
         });
-    </script>
 
+        // Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('menuOverlay');
+        const openMenu = document.getElementById('openMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        openMenu.onclick = () => { sidebar.classList.add('active'); overlay.style.display = 'block'; };
+        closeMenu.onclick = closeSide;
+        overlay.onclick = closeSide;
+        
+        function closeSide() { sidebar.classList.remove('active'); overlay.style.display = 'none'; }
+
+        document.querySelectorAll('.menu-sidebar a').forEach(link => {
+            link.addEventListener('click', closeSide);
+        });
+
+        // Modal de Serviços
+        const modal = document.getElementById('serviceModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(title, contentHtml) {
+            modalTitle.innerText = title;
+            modalBody.innerHTML = contentHtml; // Inserimos o HTML da tabela de preços
+            modal.style.display = 'flex';
+        }
+
+        document.getElementById('closeModal').onclick = () => modal.style.display = 'none';
+        window.onclick = (event) => { if (event.target == modal) modal.style.display = 'none'; };
+
+        function closeModalAndGo() {
+            modal.style.display = 'none';
+            document.getElementById('agendar').scrollIntoView();
+        }
+    </script>
 </body>
 </html>

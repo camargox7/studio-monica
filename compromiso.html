@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo.iconi.ico" type="image/x-icon">
+    <title>Meus Compromissos - Studio Mônica Camargo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark-bg: #1a1a1a;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url("Studio Beauty Mônica Camargo.png");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 30px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid var(--gold);
+        }
+
+        .container {
+            padding: 40px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* CARD DE BUSCA - CORRIGIDO */
+        .search-box {
+            background: rgba(30, 30, 30, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-box h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        /* INPUT CORRIGIDO (Mais visível e sem bugs de cor) */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--gold);
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #000 !important; /* Fundo preto total para contraste */
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: #fff !important;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #b8860b, var(--gold));
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn-search:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        /* LISTA DE RESULTADOS */
+        #listaCompromissos {
+            margin-top: 20px;
+        }
+
+        .appointment-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid var(--gold);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: none; /* Inicia escondido */
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-badge {
+            float: right;
+            background: var(--gold);
+            color: #000;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-home:hover { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="font-family: 'Playfair Display', serif; color: var(--gold);">STUDIO MÔNICA CAMARGO</h1>
+    </header>
+
+    <div class="container">
+        <div class="search-box">
+            <h2>Meus Compromissos</h2>
+            
+            <div class="input-group">
+                <label>Digite seu nome cadastrado:</label>
+                <input type="text" id="clienteNome" placeholder="Ex: Ana Souza..." autocomplete="off">
+            </div>
+
+            <button class="btn-search" onclick="buscarCompromissos()">Ver meus horários</button>
+        </div>
+
+        <div id="listaCompromissos">
+            <div class="appointment-card" id="cardResultado">
+                <span class="status-badge">CONFIRMADO</span>
+                <h3 style="color: var(--gold); margin-top: 0;">Cabelo + Manicure</h3>
+                <p style="margin: 5px 0;">📅 Data: <strong>12 de Fevereiro</strong></p>
+                <p style="margin: 5px 0;">🕒 Horário: <strong>14:30h</strong></p>
+                <p style="margin: 5px 0; font-size: 12px; color: #aaa;">📍 Local: Unidade Principal</p>
+            </div>
+            
+            <p id="msgErro" class="no-results">Ops! Não encontramos nenhum horário para esse nome.</p>
+        </div>
+
+        <a href="index.html" class="back-home">← Voltar para o início</a>
+    </div>
+
+    <script>
+        function buscarCompromissos() {
+            const nomeDigitado = document.getElementById('clienteNome').value.trim().toLowerCase();
+            const card = document.getElementById('cardResultado');
+            const erro = document.getElementById('msgErro');
+
+            // Se o campo estiver vazio
+            if (nomeDigitado === "") {
+                alert("Por favor, digite seu nome.");
+                return;
+            }
+
+            // Simulação de busca (Funciona se digitar Ana ou Monica)
+            if (nomeDigitado.includes("ana") || nomeDigitado.includes("monica")) {
+                card.style.display = "block";
+                erro.style.display = "none";
+            } else {
+                card.style.display = "none";
+                erro.style.display = "block";
+            }
+        }
+
+        // Permite apertar "Enter" no teclado para buscar
+        document.getElementById('clienteNome').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                buscarCompromissos();
+            }
+        });
+    </script>
+
+</body>
+</html>
