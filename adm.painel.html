@@ -5,226 +5,321 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="logo.iconi.ico" type="image/x-icon">
     <title>Painel Admin - Studio Mônica Camargo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* ================= TELA DE CARREGAMENTO (RESTAURADA) ================= */
+        :root { --gold: #d4af37; --red: #ff4d4d; --green: #2ecc71; --dark: #1a1a1a; }
+
+        /* ================= TELA DE CARREGAMENTO ================= */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #e8e8e8; /* Cor cinza original */
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease;
+            background-color: #e8e8e8; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; z-index: 9999; 
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
-        
-        /* Logo na tela de carregamento */
-        .loader-logo {
-            width: 150px; margin-bottom: 20px; filter: grayscale(1); opacity: 0.3;
-        }
-
-        .spinner { width: 80px; height: 80px; border: 3px solid rgba(212, 175, 55, 0.1); border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; }
-        
-        .loader-text {
-            margin-top: 15px; font-family: 'Poppins', sans-serif; color: #333;
-            font-size: 12px; letter-spacing: 2px; font-weight: bold; text-transform: uppercase;
-        }
-
+        .loader-logo { width: 150px; margin-bottom: 20px; animation: pulse 2s infinite ease-in-out; }
+        .spinner { width: 60px; height: 60px; border: 3px solid rgba(212, 175, 55, 0.1); border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .loader-hidden { opacity: 0; visibility: hidden; }
 
-        /* ================= ESTILO GERAL COM LOGO NO FUNDO ================= */
+        /* ================= ESTILO GERAL ================= */
         body { 
             margin: 0; font-family: 'Poppins', sans-serif; color: #fff; min-height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url("Studio Beauty Mônica Camargo.png"); 
+            background: linear-gradient(rgba(0, 0, 0, 0.93), rgba(0, 0, 0, 0.93)), url("Studio Beauty Mônica Camargo.png"); 
             background-size: cover; background-position: center; background-attachment: fixed;
         }
 
         header { 
-            background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(10px);
-            padding: 20px 5%; border-bottom: 1px solid #d4af37; 
-            display: flex; justify-content: space-between; align-items: center; 
-            position: sticky; top: 0; z-index: 100; 
+            background: rgba(10, 10, 10, 0.95); padding: 15px 5%; border-bottom: 1px solid var(--gold); 
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; 
         }
 
-        h1 { font-family: 'Playfair Display', serif; color: #d4af37; font-size: 20px; margin: 0; }
-        .container { padding: 40px 5%; }
-        .section-title { border-left: 4px solid #d4af37; padding-left: 15px; margin: 40px 0 20px; text-transform: uppercase; letter-spacing: 1px; color: #d4af37; }
+        .nav-tabs { display: flex; gap: 8px; background: rgba(0,0,0,0.6); padding: 8px; border-radius: 50px; border: 1px solid #333; }
+        .tab-btn { background: none; border: none; color: #888; padding: 10px 18px; cursor: pointer; border-radius: 50px; transition: 0.3s; font-weight: 600; font-size: 12px; }
+        .tab-btn.active { background: var(--gold); color: #000; }
 
-        /* ================= PAINEL DE GESTÃO ================= */
-        .block-panel { background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 15px; border: 1px dashed #d4af37; margin-bottom: 25px; }
-        .block-panel label { display: block; font-size: 11px; color: #d4af37; margin-bottom: 5px; text-transform: uppercase; }
-        
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        
-        select, .custom-input { 
-            width: 100%; padding: 10px; background: rgba(0,0,0,0.7); border: 1px solid #444; 
-            border-radius: 5px; color: #fff; height: 42px; cursor: pointer; font-family: 'Poppins', sans-serif; box-sizing: border-box;
-        }
+        .container { padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .table-responsive { overflow-x: auto; margin-bottom: 50px; background: rgba(26, 26, 26, 0.8); border-radius: 15px; border: 1px solid #333; }
+        .section-title { border-left: 4px solid var(--gold); padding-left: 15px; margin-bottom: 25px; color: var(--gold); font-family: 'Playfair Display', serif; text-transform: uppercase; }
+
+        /* ================= TABELAS E CARDS ================= */
+        .table-responsive { background: rgba(0,0,0,0.5); border-radius: 15px; overflow: hidden; border: 1px solid #333; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; font-size: 14px; }
-        th { background: #d4af37; color: #000; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #222; font-size: 14px; }
+        th { background: rgba(212, 175, 55, 0.1); color: var(--gold); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .status-pendente { color: #f1c40f; font-weight: bold; }
-        .status-confirmado { color: #2ecc71; font-weight: bold; }
-        .status-bloqueado { color: #ff4d4d; font-style: italic; font-weight: bold; }
+        .btn-action { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-check { background: var(--green); color: #000; }
+        .btn-del { background: var(--red); color: #fff; }
+        .btn-zap { background: #25d366; color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
 
-        /* ================= CARDS DE SERVIÇOS ================= */
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-        .edit-card { background: rgba(26, 26, 26, 0.8); border: 1px solid #333; padding: 20px; border-radius: 15px; transition: 0.3s; }
-        .price-group { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid #333; margin: 15px 0; }
-        .row-item { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+        /* ================= GRID DE SERVIÇOS ================= */
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 25px; }
+        .edit-card { background: rgba(20, 20, 20, 0.8); border: 1px solid #333; padding: 20px; border-radius: 18px; position: relative; }
+        .price-group { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid #333; margin: 15px 0; }
         
-        .btn-action { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-confirm { background: #28a745; color: white; margin-right: 5px; }
-        .btn-cancel { background: #dc3545; color: white; }
-        .btn-save { width: 100%; padding: 12px; background: #d4af37; border: none; border-radius: 5px; color: #000; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .btn-add-sub { background: transparent; border: 1px dashed #d4af37; color: #d4af37; width: 100%; padding: 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px; font-size: 12px; }
+        .row-item { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+        
+        .custom-input { 
+            width: 100%; padding: 10px; background: #000; border: 1px solid #444; 
+            border-radius: 8px; color: #fff; font-family: 'Poppins'; box-sizing: border-box; font-size: 13px;
+        }
+
+        .label-mini { font-size: 10px; color: #888; margin-bottom: 2px; display: block; text-transform: uppercase; }
+
+        .btn-save { width: 100%; padding: 12px; background: var(--gold); border: none; border-radius: 8px; color: #000; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .btn-add-sub { background: transparent; border: 1px dashed var(--gold); color: var(--gold); width: 100%; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; }
+
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <img src="Studio Beauty Mônica Camargo.png" class="loader-logo" alt="Logo">
+        <img src="Studio Beauty Mônica Camargo.png" class="loader-logo">
         <div class="spinner"></div>
-        <div class="loader-text">Acesso Restrito - Studio Mônica Camargo</div>
+        <div style="margin-top:20px; font-family:'Poppins'; color:#333; font-size:12px; font-weight:bold; letter-spacing:2px;">SISTEMA DE GESTÃO</div>
     </div>
 
     <header>
-        <h1>PAINEL ADMIN - MÔNICA</h1>
-        <nav><a href="index.html" style="color: #dc3545; text-decoration: none; font-weight: bold;">Voltar</a></nav>
+        <h1 style="font-size: 18px; font-family: 'Playfair Display', serif; color: var(--gold); margin: 0;">MÔNICA CAMARGO ADM</h1>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('agenda')">AGENDA</button>
+            <button class="tab-btn" onclick="switchTab('clientes')">CLIENTES</button>
+            <button class="tab-btn" onclick="switchTab('servicos')">SERVIÇOS</button>
+        </div>
+        <a href="index.html" style="color:var(--red); text-decoration:none; font-size:12px; font-weight:bold;">SAIR</a>
     </header>
 
     <div class="container">
-        <h3 class="section-title">Agenda e Bloqueios</h3>
         
-        <div class="block-panel">
-            <p style="margin-top:0; color:#d4af37; font-weight:bold;">📝 MARCAR CLIENTE OU BLOQUEAR DIA/HORA</p>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
-                <div style="flex: 1; min-width: 140px;"><label>Data</label><input type="date" id="data-bloqueio" class="custom-input"></div>
-                <div style="flex: 0.5; min-width: 80px; text-align: center; margin-bottom: 10px;">
-                    <label>Dia Todo?</label>
-                    <input type="checkbox" id="dia-inteiro" style="transform: scale(1.2); cursor: pointer;">
-                </div>
-                <div style="flex: 1; min-width: 140px;"><label>Horário</label>
-                    <select id="hora-bloqueio">
-                        <option value="">Escolha...</option>
-                        <option value="09:00">09:00</option>
-                        <option value="09:30">09:30</option>
-                        <option value="10:00">10:00</option>
-                        <option value="10:30">10:30</option>   
-                        <option value="11:00">11:00</option>
-                        <option value="11:30">11:30</option>
-                        <option value="12:00">12:00</option>
-                        <option value="12:30">12:30</option>
-                        <option value="13:00">13:00</option>
-                        <option value="13:30">13:30</option>
-                        <option value="14:00">14:00</option>
-                        <option value="14:30">14:30</option>
-                        <option value="15:00">15:00</option>
-                        <option value="15:30">15:30</option>
-                        <option value="16:00">16:00</option>
-                        <option value="16:30">16:30</option>
-                        <option value="17:00">17:00</option>
-                        <option value="17:30">17:30</option>
-                        <option value="18:00">18:00</option>
-                        <option value="18:30">18:30</option>
-                        <option value="19:00">19:00</option>
-                    </select>
-                </div>
-                <div style="flex: 2; min-width: 200px;"><label>Nome / Motivo</label><input type="text" id="motivo-bloqueio" class="custom-input" placeholder="Ex: Ana Silva"></div>
-                <div style="flex: 2; min-width: 200px;"><label>Serviço</label><input type="text" id="servico-manual" class="custom-input" placeholder="Ex: Manicure"></div>
-                <div style="display: flex; gap: 5px;">
-                    <button onclick="bloquearManual('Agendado')" class="btn-action" style="background:#28a745; color:white; height:42px;">AGENDAR</button>
-                    <button onclick="bloquearManual('Bloqueado')" class="btn-action" style="background:#d4af37; color:#000; height:42px;">BLOQUEAR</button>
+        <div id="agenda" class="tab-content active">
+            <h3 class="section-title">Próximos Compromissos</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Cliente</th>
+                            <th>Serviço</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-agenda"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="clientes" class="tab-content">
+            <h3 class="section-title">Lista de Clientes Cadastradas</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome Completo</th>
+                            <th>Telefone</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-clientes"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="servicos" class="tab-content">
+            <h3 class="section-title">Gerenciar Serviços, Preços e Tempo</h3>
+            <div class="admin-grid" id="grid-servicos">
+                <div class="edit-card" onclick="adicionarNovaCategoria()" style="border: 2px dashed var(--gold); cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(212, 175, 55, 0.05); min-height: 250px;">
+                    <span style="font-size: 40px; color: var(--gold);">+</span>
+                    <p style="color:var(--gold); font-weight: bold;">CRIAR NOVA CATEGORIA</p>
                 </div>
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr><th>Cliente / Motivo</th><th>Serviço</th><th>Data/Hora</th><th>Status</th><th>Ações</th></tr>
-                </thead>
-                <tbody id="agenda-corpo">
-                    <tr id="item-ex">
-                        <td>👤 Ana Silva</td><td>Cabelo + Unha</td><td>12/02 - 14:00</td><td class="status-pendente" id="status-ex">Pendente</td>
-                        <td>
-                            <button class="btn-action btn-confirm" onclick="atualizarStatus('ex')">✔</button>
-                            <button class="btn-action btn-cancel" onclick="this.parentElement.parentElement.remove()">✘</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h3 class="section-title">Gerenciar Serviços e Preços</h3>
-        <div class="admin-grid" id="grid-servicos">
-            <div class="edit-card">
-                <label style="color:#aaa; font-size:11px;">CATEGORIA</label>
-                <input type="text" value="Manicure" class="custom-input">
-                <div class="price-group">
-                    <div id="sub-manicure">
-                        <div class="row-item">
-                            <input type="text" value="Unha Básica" style="flex:2;" class="custom-input"><input type="text" value="50,00" style="flex:1;" class="custom-input"><input type="text" value="45 min" style="flex:1;" class="custom-input">
-                            <button class="btn-action btn-cancel" onclick="this.parentElement.remove()">✘</button>
-                        </div>
-                    </div>
-                    <button class="btn-add-sub" onclick="addLinha('sub-manicure')">+ Adicionar Item</button>
-                </div>
-                <button class="btn-save" onclick="alert('Salvo!')">Salvar Categoria</button>
-            </div>
-
-            <div class="edit-card" onclick="novaCategoria()" style="border: 2px dashed #d4af37; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(212, 175, 55, 0.05);">
-                <span style="font-size: 40px; color: #d4af37;">+</span>
-                <p style="color:#d4af37; font-weight: bold;">CRIAR NOVA CATEGORIA</p>
-            </div>
-        </div>
     </div>
 
-    <script>
-        function atualizarStatus(id) {
-            const st = document.getElementById('status-'+id);
-            st.innerText = "Confirmado"; st.className = "status-confirmado";
-            alert("Agendamento Confirmado!");
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, getDocs, doc, updateDoc, deleteDoc, setDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        function bloquearManual(tipo) {
-            const data = document.getElementById('data-bloqueio').value;
-            const hora = document.getElementById('hora-bloqueio').value;
-            const motivo = document.getElementById('motivo-bloqueio').value;
-            const servico = document.getElementById('servico-manual').value || "---";
-            const diaInteiro = document.getElementById('dia-inteiro').checked;
-            if(!data || !motivo) return alert("Preencha Data e Nome!");
-            if(!diaInteiro && !hora) return alert("Escolha o horário!");
-            const dataParts = data.split('-');
-            const dataFormatada = dataParts[2] + '/' + dataParts[1];
-            const horaExibida = diaInteiro ? "DIA TODO" : hora;
-            const id = Date.now();
-            const tr = document.createElement('tr');
-            tr.id = 'item-'+id;
-            tr.innerHTML = `<td>${tipo === 'Agendado' ? '👤' : '🚫'} ${motivo}</td><td>${diaInteiro ? '---' : servico}</td><td>${dataFormatada} - ${horaExibida}</td><td class="${tipo === 'Agendado' ? 'status-confirmado' : 'status-bloqueado'}">${diaInteiro ? 'OFF' : tipo.toUpperCase()}</td><td><button class="btn-action btn-cancel" onclick="this.parentElement.parentElement.remove()">✘</button></td>`;
-            document.getElementById('agenda-corpo').prepend(tr);
-            document.getElementById('motivo-bloqueio').value = ""; document.getElementById('servico-manual').value = "";
-        }
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJ6CccwzLWQZtkmUdJhoeqouWXU7vv_Sk",
+            authDomain: "studio-monica.firebaseapp.com",
+            projectId: "studio-monica",
+            storageBucket: "studio-monica.firebasestorage.app",
+            messagingSenderId: "138869623014",
+            appId: "1:138869623014:web:55e0bf1fb8fcf7da431327"
+        };
 
-        function addLinha(id) {
-            const div = document.createElement('div');
-            div.className = 'row-item';
-            div.innerHTML = `<input type="text" placeholder="Serviço" style="flex:2;" class="custom-input"><input type="text" placeholder="R$" style="flex:1;" class="custom-input"><input type="text" placeholder="Tempo" style="flex:1;" class="custom-input"><button class="btn-action btn-cancel" onclick="this.parentElement.remove()">✘</button>`;
-            document.getElementById(id).appendChild(div);
-        }
-
-        function novaCategoria() {
-            const id = Date.now();
-            const card = document.createElement('div');
-            card.className = 'edit-card';
-            card.innerHTML = `<label style="color:#aaa; font-size:11px;">NOVA CATEGORIA</label><input type="text" placeholder="Nome" class="custom-input"><div class="price-group"><div id="sub-${id}"></div><button class="btn-add-sub" onclick="addLinha('sub-${id}')">+ Item</button></div><button class="btn-save" onclick="alert('Salvo!')">Salvar</button><button onclick="this.parentElement.remove()" style="background:none; border:none; color:red; cursor:pointer; width:100%; margin-top:10px;">Excluir</button>`;
-            document.getElementById('grid-servicos').insertBefore(card, document.getElementById('grid-servicos').lastElementChild);
-        }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         window.addEventListener("load", () => {
-            setTimeout(() => { document.getElementById("loader").classList.add("loader-hidden"); }, 800);
+            carregarAgenda();
+            carregarClientes();
+            carregarServicos();
+            setTimeout(() => document.getElementById("loader").classList.add("loader-hidden"), 1000);
         });
+
+        // --- AGENDA ---
+        async function carregarAgenda() {
+            const tbody = document.getElementById('lista-agenda');
+            const snap = await getDocs(query(collection(db, "agendamentos"), orderBy("data", "asc")));
+            tbody.innerHTML = "";
+            snap.forEach(documento => {
+                const d = documento.data();
+                if(d.status !== "Cancelado") {
+                    const dataFmt = d.data.split('-').reverse().join('/');
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${dataFmt} - ${d.hora}h</td>
+                            <td>${d.clienteNome || 'Cliente'}</td>
+                            <td>${d.servico}</td>
+                            <td style="color:${d.status === 'Confirmado' ? '#2ecc71' : '#f1c40f'}; font-weight:bold;">${d.status || 'Pendente'}</td>
+                            <td>
+                                <button class="btn-action btn-check" onclick="atualizarStatus('${documento.id}', 'Confirmado')">✔</button>
+                                <button class="btn-action btn-del" onclick="removerItem('${documento.id}', 'agendamentos')">✘</button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            });
+        }
+
+        // --- CLIENTES ---
+        async function carregarClientes() {
+            const tbody = document.getElementById('lista-clientes');
+            const snap = await getDocs(collection(db, "clientes"));
+            tbody.innerHTML = "";
+            snap.forEach(doc => {
+                const u = doc.data();
+                const cleanTel = u.telefone ? u.telefone.replace(/\D/g, '') : '';
+                tbody.innerHTML += `<tr><td>${u.nome || '---'}</td><td>${u.telefone || '---'}</td><td><a href="https://wa.me/55${cleanTel}" target="_blank" class="btn-zap">WhatsApp</a></td></tr>`;
+            });
+        }
+
+        // --- SERVIÇOS COM CAMPO DE TEMPO ---
+        async function carregarServicos() {
+            const grid = document.getElementById('grid-servicos');
+            const snap = await getDocs(collection(db, "categorias_servicos"));
+            const btnAdd = grid.lastElementChild;
+            grid.innerHTML = "";
+            
+            snap.forEach(documento => {
+                const cat = documento.data();
+                const card = document.createElement('div');
+                card.className = 'edit-card';
+                card.innerHTML = `
+                    <label class="label-mini">Nome da Categoria</label>
+                    <input type="text" id="name-${documento.id}" value="${cat.nome}" class="custom-input" style="font-weight:bold; color:var(--gold); font-size:16px;">
+                    
+                    <div class="price-group" id="container-${documento.id}">
+                        <div style="display:flex; gap:8px; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid #333;">
+                            <span style="flex:2; font-size:9px; color:#666;">SERVIÇO</span>
+                            <span style="flex:1; font-size:9px; color:#666;">PREÇO R$</span>
+                            <span style="flex:1; font-size:9px; color:#666;">TEMPO (MIN)</span>
+                            <span style="width:30px;"></span>
+                        </div>
+                        ${(cat.itens || []).map((item) => `
+                            <div class="row-item">
+                                <input type="text" placeholder="Ex: Corte" value="${item.nome}" class="custom-input" style="flex:2">
+                                <input type="text" placeholder="50,00" value="${item.preco}" class="custom-input" style="flex:1">
+                                <input type="text" placeholder="30" value="${item.tempo || ''}" class="custom-input" style="flex:1">
+                                <button class="btn-action btn-del" onclick="this.parentElement.remove()">✘</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-add-sub" onclick="addLinhaItem('container-${documento.id}')">+ Adicionar Item</button>
+                    <button class="btn-save" onclick="salvarCategoria('${documento.id}')">Salvar Categoria</button>
+                    <button onclick="removerItem('${documento.id}', 'categorias_servicos')" style="background:none; border:none; color:var(--red); cursor:pointer; width:100%; margin-top:15px; font-size:11px;">Excluir Categoria</button>
+                `;
+                grid.appendChild(card);
+            });
+            grid.appendChild(btnAdd);
+        }
+
+        window.addLinhaItem = (id) => {
+            const div = document.createElement('div');
+            div.className = 'row-item';
+            div.innerHTML = `
+                <input type="text" placeholder="Serviço" class="custom-input" style="flex:2">
+                <input type="text" placeholder="R$" class="custom-input" style="flex:1">
+                <input type="text" placeholder="Min" class="custom-input" style="flex:1">
+                <button class="btn-action btn-del" onclick="this.parentElement.remove()">✘</button>
+            `;
+            document.getElementById(id).appendChild(div);
+        };
+
+        window.salvarCategoria = async (id) => {
+            const nomeCat = document.getElementById(`name-${id}`).value;
+            const rows = document.getElementById(`container-${id}`).querySelectorAll('.row-item');
+            const itens = Array.from(rows).map(r => ({
+                nome: r.querySelectorAll('input')[0].value,
+                preco: r.querySelectorAll('input')[1].value,
+                tempo: r.querySelectorAll('input')[2].value
+            })).filter(i => i.nome !== "");
+
+            await updateDoc(doc(db, "categorias_servicos", id), { nome: nomeCat, itens: itens });
+            alert("Categoria '" + nomeCat + "' salva!");
+        };
+
+        window.adicionarNovaCategoria = async () => {
+            const id = "cat_" + Date.now();
+            await setDoc(doc(db, "categorias_servicos", id), { nome: "Nova Categoria", itens: [] });
+            carregarServicos();
+        };
+
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.currentTarget.classList.add('active');
+        };
+
+       window.atualizarStatus = async (id, status) => {
+    try {
+        // 1. Busca os dados do agendamento para montar a mensagem
+        const snap = await getDocs(query(collection(db, "agendamentos")));
+        let dadosAgendamento = null;
+        
+        // Encontra o agendamento específico pelo ID
+        snap.forEach(doc => { if(doc.id === id) dadosAgendamento = doc.data(); });
+
+        if (dadosAgendamento) {
+            // 2. Atualiza no Firebase
+            await updateDoc(doc(db, "agendamentos", id), { status: status });
+            
+            // 3. Formata a data e o telefone
+            const dataFmt = dadosAgendamento.data.split('-').reverse().join('/');
+            const telLimpo = dadosAgendamento.clienteTelefone ? dadosAgendamento.clienteTelefone.replace(/\D/g, '') : '';
+
+            // 4. Cria a mensagem personalizada
+            const mensagem = `Olá ${dadosAgendamento.clienteNome}, aqui é do *Studio Mônica Camargo*! ✨%0APassando para confirmar seu agendamento:%0A%0A🗓️ *Data:* ${dataFmt}%0A⏰ *Horário:* ${dadosAgendamento.hora}h%0A💅 *Serviço:* ${dadosAgendamento.servico}%0A%0AEstamos te aguardando! 😊`;
+
+            // 5. Abre o WhatsApp (se houver telefone cadastrado)
+            if(telLimpo) {
+                window.open(`https://wa.me/55${telLimpo}?text=${mensagem}`, '_blank');
+            } else {
+                alert("Agendamento confirmado! (Cliente sem telefone cadastrado para envio automático)");
+            }
+            
+            carregarAgenda(); // Atualiza a tabela na tela
+        }
+    } catch (error) {
+        console.error("Erro ao confirmar:", error);
+        alert("Erro ao processar confirmação.");
+    }
+};
+
+        window.removerItem = async (id, colecao) => {
+            if(confirm("Excluir permanentemente?")) {
+                await deleteDoc(doc(db, colecao, id));
+                colecao === 'agendamentos' ? carregarAgenda() : carregarServicos();
+            }
+        };
     </script>
 </body>
 </html>

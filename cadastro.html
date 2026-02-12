@@ -4,258 +4,163 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="logo.iconi.ico" type="image/x-icon">
-    <title>STUDIO BEAUTY MÔNICA CAMARGO</title>
+    <title>CADASTRO - STUDIO MÔNICA CAMARGO</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ================= TELA DE CARREGAMENTO ADICIONADA ================= */
-        #loader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #e8e8e8; /* Branco sólido mais escuro */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-            overflow: hidden;
+        /* Alerta elegante igual ao da Home */
+        .aviso-customizado {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #1a1a1a; color: #d4af37; border: 1px solid #d4af37;
+            padding: 15px 25px; border-radius: 10px; z-index: 10000;
+            font-family: 'Poppins', sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none; animation: slideDown 0.5s ease-out; text-align: center;
         }
-        .loader-content {
-            position: relative;
-            width: 100%; height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .loader-logo-bg {
-            position: absolute;
-            width: 100%; height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-        .spinner {
-            width: 90px; height: 90px;
-            border: 3px solid rgba(212, 175, 55, 0.1);
-            border-top: 3px solid #d4af37;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-            background: rgba(232, 232, 232, 0.6);
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .loader-text {
-            font-family: 'Playfair Display', serif;
-            color: #b8860b;
-            font-size: 16px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            background: rgba(232, 232, 232, 0.6);
-            padding: 5px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
+        @keyframes slideDown { from { top: -100px; opacity: 0; } to { top: 20px; opacity: 1; } }
+
+        /* Estilos do Loader */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #e8e8e8; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        .loader-content { display: flex; flex-direction: column; align-items: center; }
+        .loader-logo { width: 120px; margin-bottom: 20px; animation: pulse 2s infinite ease-in-out; }
+        .spinner { width: 60px; height: 60px; border: 3px solid rgba(212, 175, 55, 0.1); border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loader-hidden { opacity: 0; visibility: hidden; }
 
-        /* ================= SEU CÓDIGO ORIGINAL ABAIXO (MANTIDO) ================= */
-        :root {
-            --gold-main: #d4af37;
-            --gold-light: #f5e6a8;
-            --gold-strong: #b8860b;
-            --bg-overlay: rgba(0, 0, 0, 0.7);
-        }
+        :root { --gold-main: #d4af37; --bg-overlay: rgba(0, 0, 0, 0.85); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; font-family: 'Poppins', sans-serif; color: #fff; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        
+        /* Fundo Animado igual a Home */
+        .background-animated { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), url("Studio Beauty Mônica Camargo.png"); background-size: cover; background-position: center; animation: panEffect 30s ease-in-out infinite alternate; }
+        @keyframes panEffect { 0% { transform: scale(1.1); } 100% { transform: scale(1.2); } }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Poppins', sans-serif;
-            background-color: #ffffff;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .background-animated {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                linear-gradient(var(--bg-overlay), var(--bg-overlay)),
-                url("Studio Beauty Mônica Camargo.png");
-            background-size: 50%;
-            background-position: center;
-            animation: panEffect 25s ease-in-out infinite alternate;
-        }
-
-        @keyframes panEffect {
-            0% { transform: scale(1.0) translate(0, 0); }
-            50% { transform: scale(1.1) translate(-1%, 1%); }
-            100% { transform: scale(1.05) translate(1%, -1%); }
-        }
-
-        .cadastro-container {
-            background: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 30px 40px;
-            width: 90%;
-            max-width: 420px;
-            max-height: 95vh;
-            overflow-y: auto;
-            border-radius: 20px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-
-        .cadastro-container::-webkit-scrollbar {
-            width: 5px;
-        }
-        .cadastro-container::-webkit-scrollbar-thumb {
-            background: var(--gold-main);
-            border-radius: 10px;
-        }
-
-        .cadastro-container h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--gold-main);
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            letter-spacing: 2px;
-        }
-
-        .cadastro-container label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--gold-light);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .cadastro-container input {
-            width: 100%;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.05) !important;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 8px;
-            outline: none;
-            color: #fff !important;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .cadastro-container input:focus {
-            border-color: var(--gold-main);
-            background: rgba(255, 255, 255, 0.1) !important;
-        }
-
-        input:-webkit-autofill {
-            -webkit-text-fill-color: #fff !important;
-            -webkit-box-shadow: 0 0 0px 1000px #1a1a1a inset !important;
-        }
-
-        .cadastro-container button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, var(--gold-strong), var(--gold-main));
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .cadastro-container button:hover {
-            filter: brightness(1.2);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        .cadastro-container p {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #ccc;
-        }
-
-        .cadastro-container a {
-            color: var(--gold-main);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .cadastro-container a:hover {
-            text-decoration: underline;
-        }
+        .auth-container { background: rgba(15, 15, 15, 0.9); border: 1px solid var(--gold-main); padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; backdrop-filter: blur(10px); }
+        .auth-container h2 { font-family: 'Playfair Display', serif; color: var(--gold-main); margin-bottom: 20px; font-size: 28px; }
+        
+        .auth-form label { display: block; text-align: left; margin-bottom: 5px; color: #d4af37; font-size: 13px; }
+        .auth-form input { width: 100%; padding: 12px; background: #000; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 8px; color: #fff; margin-bottom: 15px; outline: none; }
+        
+        .btn-confirm { width: 100%; padding: 15px; background: linear-gradient(45deg, #b8860b, #d4af37); border: none; border-radius: 8px; font-weight: bold; text-transform: uppercase; cursor: pointer; color: #000; transition: 0.3s; }
+        .btn-confirm:hover { transform: scale(1.02); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+        
+        .auth-footer { margin-top: 20px; font-size: 14px; color: #ccc; }
+        .auth-footer a { color: var(--gold-main); text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div id="loader">
         <div class="loader-content">
-            <img src="Studio Beauty Mônica Camargo.png" class="loader-logo-bg" alt="Logo">
+            <img src="Studio Beauty Mônica Camargo.png" class="loader-logo">
             <div class="spinner"></div>
-            <h1 class="loader-text">STUDIO BEAUTY</h1>
         </div>
     </div>
 
+    <div id="meuAlerta" class="aviso-customizado"></div>
     <div class="background-animated"></div>
 
-    <div class="cadastro-container">
-        <h2>CADASTRAR-SE</h2>
+    <div class="auth-container">
+        <h2>Cadastro</h2>
+        <div class="auth-form">
+            <label>Nome Completo</label>
+            <input type="text" id="nome" placeholder="Digite seu nome">
 
-        <form>
-            <label for="nome">Nome completo</label>
-            <input type="text" id="nome" placeholder="Seu nome completo" required>
+            <label>WhatsApp (Apenas números)</label>
+            <input type="text" id="telefone" placeholder="(00) 00000-0000" maxlength="15">
 
-            <label for="email">E-mail</label>
-            <input type="email" id="email" placeholder="Seu melhor e-mail" required>
+            <label>E-mail</label>
+            <input type="email" id="email" placeholder="seu@email.com">
 
-            <label for="telefone">Telefone</label>
-            <input type="tel" id="telefone" placeholder="(00) 00000-0000" required>
+            <label>Sua Senha</label>
+            <input type="password" id="senha" placeholder="Crie uma senha">
 
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" placeholder="Crie uma senha forte" required>
-
-            <label for="confirmar">Confirmar senha</label>
-            <input type="password" id="confirmar" placeholder="Repita a senha" required>
-
-            <button type="submit">Finalizar Cadastro</button>
-        </form>
-
-        <p>Já possui uma conta? <br>
-            <a href="login.html">Fazer login agora</a>
-        </p>
+            <button class="btn-confirm" id="btnCadastrar">Cadastrar</button>
+        </div>
+        <div class="auth-footer">
+            Já possui conta? <a href="login.html">Entrar</a>
+        </div>
     </div>
 
-    <script>
-        window.addEventListener("load", function () {
-            const loader = document.getElementById("loader");
-            setTimeout(() => {
-                loader.classList.add("loader-hidden");
-            }, 800);
-        });
-    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJ6CccwzLWQZtkmUdJhoeqouWXU7vv_Sk",
+            authDomain: "studio-monica.firebaseapp.com",
+            projectId: "studio-monica",
+            storageBucket: "studio-monica.firebasestorage.app",
+            messagingSenderId: "138869623014",
+            appId: "1:138869623014:web:55e0bf1fb8fcf7da431327"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Remover Loader
+        window.addEventListener("load", () => {
+            setTimeout(() => document.getElementById("loader").classList.add("loader-hidden"), 800);
+        });
+
+        function mostrarAlerta(msg) {
+            const box = document.getElementById('meuAlerta');
+            box.innerText = msg; box.style.display = 'block';
+            setTimeout(() => { box.style.display = 'none'; }, 3000);
+        }
+
+        // MÁSCARA DO WHATSAPP (Apenas números e formatação automática)
+        const inputTel = document.getElementById('telefone');
+        inputTel.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, ""); 
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 10) {
+                v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+            } else if (v.length > 5) {
+                v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+            } else if (v.length > 2) {
+                v = v.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+            } else if (v.length > 0) {
+                v = v.replace(/^(\d*)/, "($1");
+            }
+            e.target.value = v;
+        });
+
+        // SALVAR NO FIREBASE
+        document.getElementById('btnCadastrar').onclick = async () => {
+            const nome = document.getElementById('nome').value;
+            const tel = document.getElementById('telefone').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            if(!nome || !tel || !email || !senha) {
+                mostrarAlerta("⚠️ Preencha todos os campos!");
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+                const user = userCredential.user;
+
+                await setDoc(doc(db, "clientes", user.uid), {
+                    nome: nome,
+                    telefone: tel,
+                    email: email,
+                    uid: user.uid
+                });
+
+                mostrarAlerta("✅ Cadastro realizado com sucesso!");
+                setTimeout(() => { window.location.href = "index.html"; }, 2000);
+
+            } catch (error) {
+                let erroMsg = "❌ Erro ao cadastrar.";
+                if(error.code === 'auth/email-already-in-use') erroMsg = "❌ E-mail já cadastrado!";
+                if(error.code === 'auth/weak-password') erroMsg = "❌ Senha muito fraca (mín. 6 dígitos)!";
+                mostrarAlerta(erroMsg);
+            }
+        };
+    </script>
 </body>
 </html>
