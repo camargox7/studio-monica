@@ -11,211 +11,85 @@
             --gold: #d4af37;
             --dark-bg: #1a1a1a;
             --red: #ff4d4d;
+            --green: #28a745;
         }
 
-        /* ================= TELA DE CARREGAMENTO COM LOGO ================= */
+        /* ================= TELA DE CARREGAMENTO ================= */
         #loader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #e8e8e8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #e8e8e8; display: flex; justify-content: center;
+            align-items: center; z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease;
         }
-
-        .loader-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .loader-logo {
-            width: 120px; /* Ajuste o tamanho conforme sua logo */
-            margin-bottom: 20px;
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-         .spinner {
-            width: 90px; height: 90px;
-            border: 3px solid rgba(212, 175, 55, 0.1);
-            border-top: 3px solid #d4af37;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-            background: rgba(232, 232, 232, 0.6);
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-
-
-         .loader-text {
-            font-family: 'Playfair Display', serif;
-            color: #b8860b;
-            font-size: 16px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            background: rgba(232, 232, 232, 0.6);
-            padding: 5px 15px;
-            border-radius: 5px;
-        }
-
+        .loader-content { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .loader-logo { width: 120px; margin-bottom: 20px; animation: pulse 2s infinite ease-in-out; }
+        .spinner { width: 90px; height: 90px; border: 3px solid rgba(212, 175, 55, 0.1); border-top: 3px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .loader-text { font-family: 'Playfair Display', serif; color: #b8860b; font-size: 16px; letter-spacing: 5px; text-transform: uppercase; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        
         .loader-hidden { opacity: 0; visibility: hidden; }
 
         /* ================= ESTILOS GERAIS ================= */
         body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
+            margin: 0; font-family: 'Poppins', sans-serif;
             background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url("Studio Beauty Mônica Camargo.png");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #fff;
-            min-height: 100vh;
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: #fff; min-height: 100vh;
         }
 
-        header {
-            padding: 30px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid var(--gold);
-        }
+        header { padding: 30px; text-align: center; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid var(--gold); }
 
-        .container {
-            padding: 40px 20px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        .container { padding: 40px 20px; max-width: 500px; margin: 0 auto; }
 
-        .search-box {
-            background: rgba(30, 30, 30, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid var(--gold);
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .search-box { background: rgba(30, 30, 30, 0.95); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); text-align: center; margin-bottom: 30px; }
 
         .appointment-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-left: 5px solid var(--gold);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            animation: fadeIn 0.5s ease;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
+            border-left: 5px solid var(--gold); padding: 20px; border-radius: 12px;
+            margin-bottom: 15px; animation: fadeIn 0.5s ease; position: relative;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .status-badge {
-            float: right;
-            background: var(--gold);
-            color: #000;
-            font-size: 10px;
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-weight: bold;
-        }
+        .status-badge { float: right; font-size: 10px; padding: 4px 12px; border-radius: 50px; font-weight: bold; text-transform: uppercase; }
+        .status-pendente { background: var(--gold); color: #000; }
+        .status-confirmado { background: var(--green); color: #fff; }
+        .status-cancelado { background: var(--red); color: #fff; }
 
         .btn-cancelar {
-            background: rgba(255, 77, 77, 0.1);
-            border: 1px solid var(--red);
-            color: var(--red);
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-            transition: 0.3s;
-            font-weight: 600;
+            background: rgba(255, 77, 77, 0.1); border: 1px solid var(--red); color: var(--red);
+            padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; margin-top: 15px; width: 100%; transition: 0.3s; font-weight: 600;
         }
-
         .btn-cancelar:hover { background: var(--red); color: white; }
 
-        /* ================= MODAL PERSONALIZADO ================= */
+        .btn-apagar {
+            background: none; border: 1px solid #444; color: #888; 
+            padding: 8px; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 10px; width: 100%; transition: 0.3s;
+        }
+        .btn-apagar:hover { border-color: #d4af37; color: #d4af37; }
+
+        /* MODAL PERSONALIZADO */
         #customModal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: none; 
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            backdrop-filter: blur(5px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85);
+            display: none; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(5px);
         }
-
-        .modal-content {
-            background: #1a1a1a;
-            border: 1px solid var(--gold);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 320px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        .modal-content { 
+            background: #1a1a1a; border: 1px solid var(--gold); padding: 30px; 
+            border-radius: 20px; max-width: 300px; text-align: center;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
-
-        .modal-logo {
-            width: 50px;
-            margin-bottom: 15px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .btn-confirm {
-            flex: 1;
-            padding: 12px;
-            background: var(--gold);
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-back {
-            flex: 1;
-            padding: 12px;
-            background: transparent;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 30px;
-            display: none;
-        }
-
-        .back-home {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #888;
-            text-decoration: none;
-        }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-confirm-modal { flex: 1; padding: 12px; background: var(--gold); border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: #000; }
+        .btn-back-modal { flex: 1; padding: 12px; background: transparent; border: 1px solid #444; color: #fff; border-radius: 8px; cursor: pointer; }
+        
+        .no-results { text-align: center; padding: 30px; display: none; }
+        .back-home { display: block; text-align: center; margin-top: 20px; color: #888; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div id="loader">
         <div class="loader-content">
-            <img src="Studio Beauty Mônica Camargo.png" alt="Logo Studio Mônica Camargo" class="loader-logo">
+            <img src="Studio Beauty Mônica Camargo.png" class="loader-logo">
             <div class="spinner"></div>
             <h1 class="loader-text">STUDIO BEAUTY</h1>
         </div>
@@ -223,12 +97,12 @@
 
     <div id="customModal">
         <div class="modal-content">
-            <img src="logo.iconi.ico" class="modal-logo" alt="Logo">
-            <h3 style="font-family: 'Playfair Display', serif; color: var(--gold);">Cancelar?</h3>
-            <p style="font-size: 13px; color: #bbb;">Você confirma o cancelamento deste horário no Studio Mônica Camargo?</p>
+            <img src="logo.iconi.ico" style="width:40px; margin-bottom:10px;" alt="">
+            <h3 id="modalTitle" style="font-family: 'Playfair Display', serif; color: var(--gold); margin: 0 0 10px 0;"></h3>
+            <p id="modalText" style="font-size: 13px; color: #bbb; margin: 0;"></p>
             <div class="modal-buttons">
-                <button class="btn-back" onclick="fecharModal()">Voltar</button>
-                <button class="btn-confirm" id="confirmarAcao">Sim, cancelar</button>
+                <button class="btn-back-modal" onclick="fecharModal()">Voltar</button>
+                <button class="btn-confirm-modal" id="confirmarAcaoBtn">Confirmar</button>
             </div>
         </div>
     </div>
@@ -240,16 +114,14 @@
     <div class="container">
         <div class="search-box">
             <h2 style="font-family: 'Playfair Display', serif; color: var(--gold); margin:0;">Meus Horários</h2>
-            <p id="statusMensagem" style="font-size:13px; color:#aaa; margin-top:10px;">Verificando agenda atualizada...</p>
+            <p id="statusMensagem" style="font-size:13px; color:#aaa; margin-top:10px;">Verificando sua agenda...</p>
         </div>
 
         <div id="listaCompromissos"></div>
-        
         <div id="msgVazio" class="no-results">
-            <p style="margin:0;">Você não possui agendamentos futuros.</p>
-            <a href="index.html#agendar" style="color:var(--gold); font-size:14px; text-decoration:none; display:block; margin-top:10px;">Agendar novo horário →</a>
+            <p>Você não possui agendamentos ativos.</p>
+            <a href="index.html#agendar" style="color:var(--gold);">Agendar novo horário →</a>
         </div>
-
         <a href="index.html" class="back-home">← Voltar para o início</a>
     </div>
 
@@ -271,7 +143,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let idSelecionado = null;
+        let acaoPendente = null;
 
         window.addEventListener("load", () => {
             setTimeout(() => document.getElementById("loader").classList.add("loader-hidden"), 1000);
@@ -289,45 +161,99 @@
                 const q = query(collection(db, "agendamentos"), where("clienteUid", "==", uid));
                 const querySnapshot = await getDocs(q);
                 lista.innerHTML = "";
-                let temAtivo = false;
+                let temAgendamento = false;
                 const agora = new Date();
 
-                querySnapshot.forEach((doc) => {
-                    const dados = doc.data();
+                querySnapshot.forEach((docSnap) => {
+                    const dados = docSnap.data();
+                    
+                    // Se o cliente removeu o card da tela, não mostra de jeito nenhum
+                    if (dados.escondidoPeloCliente === true) return;
+
+                    // Normaliza o status para evitar erros de maiúscula/minúscula
+                    const statusAtual = (dados.status || "Pendente");
+                    const statusFormatado = statusAtual.toLowerCase();
+                    const foiCancelado = statusFormatado === "cancelado";
+
+                    // LOGICA PARA NÃO SUMIR:
+                    // Mostra se for cancelado (independente da data) OU se for um agendamento futuro
                     const dataAgendamento = new Date(`${dados.data}T${dados.hora}:00`);
-                    if (dados.status !== "Cancelado" && dataAgendamento > agora) {
-                        temAtivo = true;
+                    
+                    if (foiCancelado || dataAgendamento > agora) {
+                        temAgendamento = true;
+                        
+                        let statusClasse = (statusFormatado === "confirmado") ? "status-confirmado" : 
+                                           (foiCancelado) ? "status-cancelado" : "status-pendente";
+                        
+                        let extraStyle = (foiCancelado) ? "border-left-color: var(--red); background: rgba(255, 77, 77, 0.05);" : "";
+
+                        const nomeServico = Array.isArray(dados.servicos) ? dados.servicos.join(" + ") : (dados.servico || "Serviço");
                         const dataFmt = dados.data.split('-').reverse().join('/');
+                        const tempoFmt = dados.tempoTotal ? `${dados.tempoTotal} min` : "30 min";
+
                         lista.innerHTML += `
-                            <div class="appointment-card">
-                                <span class="status-badge">${dados.status || 'Pendente'}</span>
-                                <h3 style="color: var(--gold); margin-top: 0;">${dados.servico}</h3>
-                                <p style="margin: 5px 0;">📅 Data: <strong>${dataFmt}</strong></p>
-                                <p style="margin: 5px 0;">🕒 Horário: <strong>${dados.hora}h</strong></p>
-                                <button class="btn-cancelar" onclick="abrirModal('${doc.id}')">Cancelar este horário</button>
+                            <div class="appointment-card" style="${extraStyle}">
+                                <span class="status-badge ${statusClasse}">${statusAtual}</span>
+                                <h3 style="color: var(--gold); margin-top: 0; font-size: 16px;">${nomeServico}</h3>
+                                <p style="margin: 5px 0; font-size: 14px;">📅 Data: <strong>${dataFmt}</strong></p>
+                                <p style="margin: 5px 0; font-size: 14px;">🕒 Horário: <strong>${dados.hora}</strong></p>
+                                <p style="margin: 5px 0; font-size: 14px;">⏱️ Duração: <strong>${tempoFmt}</strong></p>
+                                
+                                ${foiCancelado 
+                                    ? `<div style="margin-top:10px; border-top: 1px solid rgba(255,0,0,0.2); padding-top:10px;">
+                                         <p style="color: var(--red); font-size: 12px; font-weight: bold; margin-bottom:10px;">⚠️ Este agendamento foi cancelado.</p>
+                                         <button class="btn-apagar" onclick="abrirModal('apagar', '${docSnap.id}')">Entendido / Remover da lista</button>
+                                       </div>` 
+                                    : `<button class="btn-cancelar" onclick="abrirModal('cancelar', '${docSnap.id}')">Cancelar meu horário</button>`
+                                }
                             </div>
                         `;
                     }
                 });
 
-                if (!temAtivo) {
-                    msgVazio.style.display = "block";
-                    document.getElementById('statusMensagem').innerText = "";
-                } else {
-                    document.getElementById('statusMensagem').innerText = "Seus próximos horários:";
+                if (!temAgendamento) { 
+                    msgVazio.style.display = "block"; 
+                    document.getElementById('statusMensagem').innerText = ""; 
+                } else { 
+                    document.getElementById('statusMensagem').innerText = "Seus horários no Studio:"; 
+                    msgVazio.style.display = "none";
                 }
             } catch (e) { console.error(e); }
         }
 
-        window.abrirModal = function(id) { idSelecionado = id; document.getElementById('customModal').style.display = 'flex'; }
-        window.fecharModal = function() { document.getElementById('customModal').style.display = 'none'; }
+        window.abrirModal = function(tipo, id) {
+            const modal = document.getElementById('customModal');
+            const title = document.getElementById('modalTitle');
+            const text = document.getElementById('modalText');
+            
+            if (tipo === 'cancelar') {
+                title.innerText = "Cancelar?";
+                text.innerText = "Deseja cancelar seu horário? O Studio será avisado.";
+                acaoPendente = async () => {
+                    await updateDoc(doc(db, "agendamentos", id), { status: "Cancelado" });
+                    location.reload();
+                };
+            } else if (tipo === 'apagar') {
+                title.innerText = "Limpar aviso?";
+                text.innerText = "Isso apenas remove o card da sua tela de agendamentos.";
+                acaoPendente = async () => {
+                    await updateDoc(doc(db, "agendamentos", id), { escondidoPeloCliente: true });
+                    location.reload();
+                };
+            }
+            modal.style.display = 'flex';
+        }
 
-        document.getElementById('confirmarAcao').onclick = async function() {
-            if (idSelecionado) {
-                try {
-                    await updateDoc(doc(db, "agendamentos", idSelecionado), { status: "Cancelado" });
-                    location.reload(); 
-                } catch (e) { alert("Erro ao cancelar."); }
+        window.fecharModal = function() {
+            document.getElementById('customModal').style.display = 'none';
+            acaoPendente = null;
+        }
+
+        document.getElementById('confirmarAcaoBtn').onclick = async function() {
+            if (acaoPendente) {
+                this.innerText = "Aguarde...";
+                this.disabled = true;
+                await acaoPendente();
             }
         }
     </script>

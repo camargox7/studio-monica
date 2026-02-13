@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" href="logo.iconi.ico" type="image/x-icon">
     <title>Painel Admin - Studio Mônica Camargo</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
+        
         :root { --gold: #d4af37; --red: #ff4d4d; --green: #2ecc71; --dark: #1a1a1a; }
 
-        /* ================= TELA DE CARREGAMENTO ================= */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #e8e8e8; display: flex; flex-direction: column; 
@@ -22,7 +25,6 @@
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .loader-hidden { opacity: 0; visibility: hidden; }
 
-        /* ================= ESTILO GERAL ================= */
         body { 
             margin: 0; font-family: 'Poppins', sans-serif; color: #fff; min-height: 100vh;
             background: linear-gradient(rgba(0, 0, 0, 0.93), rgba(0, 0, 0, 0.93)), url("Studio Beauty Mônica Camargo.png"); 
@@ -34,45 +36,65 @@
             display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; 
         }
 
-        .nav-tabs { display: flex; gap: 8px; background: rgba(0,0,0,0.6); padding: 8px; border-radius: 50px; border: 1px solid #333; }
-        .tab-btn { background: none; border: none; color: #888; padding: 10px 18px; cursor: pointer; border-radius: 50px; transition: 0.3s; font-weight: 600; font-size: 12px; }
+        .nav-tabs { display: flex; gap: 8px; background: rgba(0,0,0,0.6); padding: 5px; border-radius: 50px; border: 1px solid #333; }
+        .tab-btn { background: none; border: none; color: #888; padding: 8px 15px; cursor: pointer; border-radius: 50px; transition: 0.3s; font-weight: 600; font-size: 11px; }
         .tab-btn.active { background: var(--gold); color: #000; }
 
-        .container { padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
+        .container { padding: 20px 4%; max-width: 1200px; margin: 0 auto; }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-title { border-left: 4px solid var(--gold); padding-left: 15px; margin-bottom: 25px; color: var(--gold); font-family: 'Playfair Display', serif; text-transform: uppercase; }
+        .section-title { border-left: 4px solid var(--gold); padding-left: 15px; margin-bottom: 25px; color: var(--gold); font-family: 'Playfair Display', serif; text-transform: uppercase; font-size: 1.2rem; }
 
-        /* ================= TABELAS E CARDS ================= */
-        .table-responsive { background: rgba(0,0,0,0.5); border-radius: 15px; overflow: hidden; border: 1px solid #333; margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #222; font-size: 14px; }
-        th { background: rgba(212, 175, 55, 0.1); color: var(--gold); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .table-responsive { 
+            background: rgba(0,0,0,0.5); border-radius: 15px; border: 1px solid #333; margin-bottom: 30px;
+            display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; 
+        }
+        
+        table { width: 100%; border-collapse: collapse; min-width: 650px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #222; font-size: 13px; }
+        th { background: rgba(212, 175, 55, 0.1); color: var(--gold); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .btn-action { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-action { 
+            width: 38px; height: 38px; border: none; border-radius: 8px; 
+            cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
         .btn-check { background: var(--green); color: #000; }
         .btn-del { background: var(--red); color: #fff; }
-        .btn-zap { background: #25d366; color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
 
-        /* ================= GRID DE SERVIÇOS ================= */
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 25px; }
-        .edit-card { background: rgba(20, 20, 20, 0.8); border: 1px solid #333; padding: 20px; border-radius: 18px; position: relative; }
-        .price-group { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid #333; margin: 15px 0; }
-        
-        .row-item { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
-        
         .custom-input { 
-            width: 100%; padding: 10px; background: #000; border: 1px solid #444; 
-            border-radius: 8px; color: #fff; font-family: 'Poppins'; box-sizing: border-box; font-size: 13px;
+            width: 100%; padding: 12px; background: #000; border: 1px solid #444; 
+            border-radius: 8px; color: #fff; font-family: 'Poppins'; box-sizing: border-box; font-size: 14px;
+        }
+        
+            /* Isso mexe APENAS no ícone do calendário para ele ficar branco */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(100%); /* Inverte do preto para o branco */
+            cursor: pointer;
+            padding: 5px;
+}
+        .manual-box { background: rgba(212, 175, 55, 0.05); border: 1px solid var(--gold); padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .label-mini { font-size: 10px; color: #888; margin-bottom: 4px; display: block; text-transform: uppercase; font-weight: bold; }
+
+        .linha-cancelada { background: rgba(255, 0, 0, 0.05) !important; opacity: 0.6; border-left: 4px solid var(--red) !important; }
+        .linha-bloqueio { background: rgba(212, 175, 55, 0.05) !important; border-left: 4px solid var(--gold) !important; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid; }
+
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .edit-card { background: rgba(20,20,20,0.8); padding: 15px; border-radius: 15px; border: 1px solid #333; position: relative; }
+        .btn-save { width:100%; background:var(--gold); padding:12px; border:none; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px; }
+        .btn-add-sub { background: transparent; border: 1px dashed var(--gold); color: var(--gold); width: 100%; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 11px; margin: 10px 0; font-weight: bold; }
+
+        .swal2-popup { background: #1a1a1a !important; color: #fff !important; border: 1px solid var(--gold) !important; border-radius: 20px !important; }
+        .swal2-title { color: var(--gold) !important; font-family: 'Playfair Display', serif !important; }
+        .swal2-confirm { background-color: var(--gold) !important; color: #000 !important; font-weight: bold !important; }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 10px; text-align: center; }
+            .nav-tabs { width: 100%; justify-content: center; }
         }
 
-        .label-mini { font-size: 10px; color: #888; margin-bottom: 2px; display: block; text-transform: uppercase; }
-
-        .btn-save { width: 100%; padding: 12px; background: var(--gold); border: none; border-radius: 8px; color: #000; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .btn-add-sub { background: transparent; border: 1px dashed var(--gold); color: var(--gold); width: 100%; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; }
-
+        
     </style>
 </head>
 <body>
@@ -80,33 +102,40 @@
     <div id="loader">
         <img src="Studio Beauty Mônica Camargo.png" class="loader-logo">
         <div class="spinner"></div>
-        <div style="margin-top:20px; font-family:'Poppins'; color:#333; font-size:12px; font-weight:bold; letter-spacing:2px;">SISTEMA DE GESTÃO</div>
     </div>
 
     <header>
-        <h1 style="font-size: 18px; font-family: 'Playfair Display', serif; color: var(--gold); margin: 0;">MÔNICA CAMARGO ADM</h1>
+        <h1 style="font-size: 16px; font-family: 'Playfair Display', serif; color: var(--gold); margin: 0;">MÔNICA CAMARGO ADM</h1>
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('agenda')">AGENDA</button>
             <button class="tab-btn" onclick="switchTab('clientes')">CLIENTES</button>
             <button class="tab-btn" onclick="switchTab('servicos')">SERVIÇOS</button>
         </div>
-        <a href="index.html" style="color:var(--red); text-decoration:none; font-size:12px; font-weight:bold;">SAIR</a>
+        <a href="index.html" style="color:var(--red); text-decoration:none; font-size:11px; font-weight:bold;">SAIR</a>
     </header>
 
     <div class="container">
-        
         <div id="agenda" class="tab-content active">
+            <div class="manual-box">
+                <h3 class="section-title" style="margin-top:0;">Agendamento Manual</h3>
+                <label class="label-mini">Nome da Cliente</label>
+                <input type="text" id="manual-nome" placeholder="Digite o nome..." class="custom-input" style="margin-bottom:15px;">
+                <label class="label-mini">Selecione os Serviços</label>
+                <div id="manual-servicos-container" style="max-height: 150px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px;" onchange="atualizarHorariosDisponiveis()"></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom:15px;">
+                    <div><label class="label-mini">Data</label><input type="date" id="manual-data" class="custom-input" onchange="atualizarHorariosDisponiveis()"></div>
+                    <div><label class="label-mini">Horário</label><select id="manual-hora-select" class="custom-input"><option value="">Aguardando...</option></select></div>
+                </div>
+                <button class="btn-save" onclick="salvarAgendamentoManual()">RESERVAR NA AGENDA</button>
+            </div>
+
+            <div id="box-bloqueio-container"></div>
+
             <h3 class="section-title">Próximos Compromissos</h3>
             <div class="table-responsive">
                 <table>
                     <thead>
-                        <tr>
-                            <th>Data/Hora</th>
-                            <th>Cliente</th>
-                            <th>Serviço</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
+                        <tr><th>Data/Hora</th><th>Cliente</th><th>Serviço</th><th>Status</th><th>Ações</th></tr>
                     </thead>
                     <tbody id="lista-agenda"></tbody>
                 </table>
@@ -114,212 +143,253 @@
         </div>
 
         <div id="clientes" class="tab-content">
-            <h3 class="section-title">Lista de Clientes Cadastradas</h3>
+            <h3 class="section-title">Lista de Clientes</h3>
             <div class="table-responsive">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Nome Completo</th>
-                            <th>Telefone</th>
-                            <th>Ação</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Nome</th><th>Telefone</th><th>Ação</th></tr></thead>
                     <tbody id="lista-clientes"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="servicos" class="tab-content">
-            <h3 class="section-title">Gerenciar Serviços, Preços e Tempo</h3>
+            <h3 class="section-title">Gerenciar Serviços</h3>
             <div class="admin-grid" id="grid-servicos">
-                <div class="edit-card" onclick="adicionarNovaCategoria()" style="border: 2px dashed var(--gold); cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(212, 175, 55, 0.05); min-height: 250px;">
+                 <div class="edit-card" onclick="adicionarNovaCategoria()" style="border: 2px dashed var(--gold); cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(212, 175, 55, 0.05); min-height: 200px; border-radius: 15px;">
                     <span style="font-size: 40px; color: var(--gold);">+</span>
-                    <p style="color:var(--gold); font-weight: bold;">CRIAR NOVA CATEGORIA</p>
+                    <p style="color:var(--gold); font-weight: bold;">NOVA CATEGORIA</p>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, query, getDocs, doc, updateDoc, deleteDoc, setDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, getDocs, getDoc, doc, updateDoc, deleteDoc, setDoc, addDoc, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBJ6CccwzLWQZtkmUdJhoeqouWXU7vv_Sk",
-            authDomain: "studio-monica.firebaseapp.com",
-            projectId: "studio-monica",
-            storageBucket: "studio-monica.firebasestorage.app",
-            messagingSenderId: "138869623014",
-            appId: "1:138869623014:web:55e0bf1fb8fcf7da431327"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBJ6CccwzLWQZtkmUdJhoeqouWXU7vv_Sk",
+        authDomain: "studio-monica.firebaseapp.com",
+        projectId: "studio-monica",
+        storageBucket: "studio-monica.firebasestorage.app",
+        messagingSenderId: "138869623014",
+        appId: "1:138869623014:web:55e0bf1fb8fcf7da431327"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const horariosBase = ["07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
+    
+    const Toast = Swal.mixin({
+        toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true
+    });
 
-        window.addEventListener("load", () => {
-            carregarAgenda();
-            carregarClientes();
-            carregarServicos();
-            setTimeout(() => document.getElementById("loader").classList.add("loader-hidden"), 1000);
+    window.addEventListener("load", () => {
+        criarCaixaBloqueio();
+        carregarAgenda();
+        carregarClientes();
+        carregarServicos();
+        carregarServicosNoManual();
+        setTimeout(() => document.getElementById("loader").classList.add("loader-hidden"), 1000);
+    });
+
+    // CORREÇÃO: Função para carregar a agenda exibindo a DATA
+    window.carregarAgenda = async () => {
+        const tbody = document.getElementById('lista-agenda');
+        const snap = await getDocs(query(collection(db, "agendamentos"), orderBy("data", "asc")));
+        tbody.innerHTML = "";
+        snap.forEach(docSnap => {
+            const d = docSnap.data();
+            const isBloqueio = (d.clienteNome || "").includes("BLOQUEIO");
+            const status = d.status || 'Pendente';
+            const isCancelado = status === "Cancelado";
+            const t = parseInt(d.tempoTotal || 60);
+            
+            // Formata a data de AAAA-MM-DD para DD/MM
+            const dataFmt = d.data ? d.data.split('-').reverse().slice(0, 2).join('/') : "--/--";
+            
+            const duracaoFmt = t >= 720 ? "DIA TODO" : (t >= 60 ? Math.floor(t/60) + "h" + (t%60 > 0 ? (t%60)+"min" : "") : t + "min");
+            let cor = isCancelado ? "#ff4d4d" : (status === "Confirmado" ? (isBloqueio ? "#ff4d4d" : "#2ecc71") : "#f1c40f");
+            
+            tbody.innerHTML += `
+                <tr class="${isCancelado ? 'linha-cancelada' : (isBloqueio ? 'linha-bloqueio' : '')}">
+                    <td><span style="font-size:10px; color:var(--gold)">${dataFmt}</span><br><strong>${d.hora}h</strong></td>
+                    <td>${d.clienteNome || d.nome}</td>
+                    <td>${Array.isArray(d.servicos) ? d.servicos.join(", ") : (d.servico || "Serviço")}<br><small style="color:var(--gold)">⏱ ${duracaoFmt}</small></td>
+                    <td><span class="status-badge" style="color:${cor}; border-color:${cor}55;">${status.toUpperCase()}</span></td>
+                    <td><div style="display:flex; gap:5px;">${(!isBloqueio && !isCancelado) ? `<button class="btn-action btn-check" onclick="confirmarAgendamentoEEnviarZap('${docSnap.id}')">✔</button>` : ''}<button class="btn-action btn-del" onclick="${isCancelado ? `removerItem('${docSnap.id}', 'agendamentos')` : `cancelarAtendimento('${docSnap.id}')`}">${isCancelado ? '🗑' : '✘'}</button></div></td>
+                </tr>`;
         });
+    };
 
-        // --- AGENDA ---
-        async function carregarAgenda() {
-            const tbody = document.getElementById('lista-agenda');
-            const snap = await getDocs(query(collection(db, "agendamentos"), orderBy("data", "asc")));
-            tbody.innerHTML = "";
-            snap.forEach(documento => {
-                const d = documento.data();
-                if(d.status !== "Cancelado") {
-                    const dataFmt = d.data.split('-').reverse().join('/');
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${dataFmt} - ${d.hora}h</td>
-                            <td>${d.clienteNome || 'Cliente'}</td>
-                            <td>${d.servico}</td>
-                            <td style="color:${d.status === 'Confirmado' ? '#2ecc71' : '#f1c40f'}; font-weight:bold;">${d.status || 'Pendente'}</td>
-                            <td>
-                                <button class="btn-action btn-check" onclick="atualizarStatus('${documento.id}', 'Confirmado')">✔</button>
-                                <button class="btn-action btn-del" onclick="removerItem('${documento.id}', 'agendamentos')">✘</button>
-                            </td>
-                        </tr>
-                    `;
-                }
-            });
-        }
+    window.salvarCategoria = async (id) => {
+        const nomeCat = document.getElementById(`name-${id}`).value;
+        const rows = document.getElementById(`container-${id}`).querySelectorAll('.row-item');
+        const itens = Array.from(rows).map(r => ({
+            nome: r.querySelectorAll('input')[0].value,
+            preco: r.querySelectorAll('input')[1].value,
+            tempo: r.querySelectorAll('input')[2].value,
+            isVariavel: r.querySelector('.var-check') ? r.querySelector('.var-check').checked : false 
+        })).filter(i => i.nome !== "");
+        await updateDoc(doc(db, "categorias_servicos", id), { nome: nomeCat, itens: itens });
+        Toast.fire({ icon: 'success', title: 'Categoria Salva!' });
+        carregarServicosNoManual();
+    };
 
-        // --- CLIENTES ---
-        async function carregarClientes() {
-            const tbody = document.getElementById('lista-clientes');
-            const snap = await getDocs(collection(db, "clientes"));
-            tbody.innerHTML = "";
-            snap.forEach(doc => {
-                const u = doc.data();
-                const cleanTel = u.telefone ? u.telefone.replace(/\D/g, '') : '';
-                tbody.innerHTML += `<tr><td>${u.nome || '---'}</td><td>${u.telefone || '---'}</td><td><a href="https://wa.me/55${cleanTel}" target="_blank" class="btn-zap">WhatsApp</a></td></tr>`;
-            });
-        }
+    window.atualizarHorariosDisponiveis = async () => {
+        const data = document.getElementById('manual-data').value;
+        const selectHora = document.getElementById('manual-hora-select');
+        const marcados = document.querySelectorAll('input[name="servico-manual"]:checked');
+        if(!data) return;
+        let tempoNecessario = 0;
+        marcados.forEach(m => tempoNecessario += parseInt(m.dataset.tempo));
+        if(tempoNecessario === 0) tempoNecessario = 30;
+        const q = query(collection(db, "agendamentos"), where("data", "==", data));
+        const snap = await getDocs(q);
+        let ocupados = [];
+        snap.forEach(doc => { 
+            const d = doc.data();
+            if(d.status !== "Cancelado") { 
+                const ini = convMin(d.hora); 
+                const fim = d.tempoTotal >= 720 ? 2000 : ini + parseInt(d.tempoTotal || 30);
+                ocupados.push({ ini: ini, fim: fim }); 
+            } 
+        });
+        selectHora.innerHTML = '<option value="">Escolha...</option>';
+        horariosBase.forEach(h => { 
+            const hIni = convMin(h); 
+            const hFim = hIni + tempoNecessario;
+            const conflito = ocupados.some(o => (hIni < o.fim && hFim > o.ini));
+            if(!conflito) selectHora.innerHTML += `<option value="${h}">${h}h</option>`; 
+        });
+    };
 
-        // --- SERVIÇOS COM CAMPO DE TEMPO ---
-        async function carregarServicos() {
-            const grid = document.getElementById('grid-servicos');
-            const snap = await getDocs(collection(db, "categorias_servicos"));
-            const btnAdd = grid.lastElementChild;
-            grid.innerHTML = "";
-            
-            snap.forEach(documento => {
-                const cat = documento.data();
-                const card = document.createElement('div');
-                card.className = 'edit-card';
-                card.innerHTML = `
-                    <label class="label-mini">Nome da Categoria</label>
-                    <input type="text" id="name-${documento.id}" value="${cat.nome}" class="custom-input" style="font-weight:bold; color:var(--gold); font-size:16px;">
-                    
-                    <div class="price-group" id="container-${documento.id}">
-                        <div style="display:flex; gap:8px; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid #333;">
-                            <span style="flex:2; font-size:9px; color:#666;">SERVIÇO</span>
-                            <span style="flex:1; font-size:9px; color:#666;">PREÇO R$</span>
-                            <span style="flex:1; font-size:9px; color:#666;">TEMPO (MIN)</span>
-                            <span style="width:30px;"></span>
-                        </div>
-                        ${(cat.itens || []).map((item) => `
-                            <div class="row-item">
-                                <input type="text" placeholder="Ex: Corte" value="${item.nome}" class="custom-input" style="flex:2">
-                                <input type="text" placeholder="50,00" value="${item.preco}" class="custom-input" style="flex:1">
-                                <input type="text" placeholder="30" value="${item.tempo || ''}" class="custom-input" style="flex:1">
-                                <button class="btn-action btn-del" onclick="this.parentElement.remove()">✘</button>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <button class="btn-add-sub" onclick="addLinhaItem('container-${documento.id}')">+ Adicionar Item</button>
-                    <button class="btn-save" onclick="salvarCategoria('${documento.id}')">Salvar Categoria</button>
-                    <button onclick="removerItem('${documento.id}', 'categorias_servicos')" style="background:none; border:none; color:var(--red); cursor:pointer; width:100%; margin-top:15px; font-size:11px;">Excluir Categoria</button>
-                `;
-                grid.appendChild(card);
-            });
-            grid.appendChild(btnAdd);
-        }
-
-        window.addLinhaItem = (id) => {
-            const div = document.createElement('div');
-            div.className = 'row-item';
-            div.innerHTML = `
-                <input type="text" placeholder="Serviço" class="custom-input" style="flex:2">
-                <input type="text" placeholder="R$" class="custom-input" style="flex:1">
-                <input type="text" placeholder="Min" class="custom-input" style="flex:1">
-                <button class="btn-action btn-del" onclick="this.parentElement.remove()">✘</button>
-            `;
-            document.getElementById(id).appendChild(div);
-        };
-
-        window.salvarCategoria = async (id) => {
-            const nomeCat = document.getElementById(`name-${id}`).value;
-            const rows = document.getElementById(`container-${id}`).querySelectorAll('.row-item');
-            const itens = Array.from(rows).map(r => ({
-                nome: r.querySelectorAll('input')[0].value,
-                preco: r.querySelectorAll('input')[1].value,
-                tempo: r.querySelectorAll('input')[2].value
-            })).filter(i => i.nome !== "");
-
-            await updateDoc(doc(db, "categorias_servicos", id), { nome: nomeCat, itens: itens });
-            alert("Categoria '" + nomeCat + "' salva!");
-        };
-
-        window.adicionarNovaCategoria = async () => {
-            const id = "cat_" + Date.now();
-            await setDoc(doc(db, "categorias_servicos", id), { nome: "Nova Categoria", itens: [] });
-            carregarServicos();
-        };
-
-        window.switchTab = (tab) => {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tab).classList.add('active');
-            event.currentTarget.classList.add('active');
-        };
-
-       window.atualizarStatus = async (id, status) => {
-    try {
-        // 1. Busca os dados do agendamento para montar a mensagem
-        const snap = await getDocs(query(collection(db, "agendamentos")));
-        let dadosAgendamento = null;
-        
-        // Encontra o agendamento específico pelo ID
-        snap.forEach(doc => { if(doc.id === id) dadosAgendamento = doc.data(); });
-
-        if (dadosAgendamento) {
-            // 2. Atualiza no Firebase
-            await updateDoc(doc(db, "agendamentos", id), { status: status });
-            
-            // 3. Formata a data e o telefone
-            const dataFmt = dadosAgendamento.data.split('-').reverse().join('/');
-            const telLimpo = dadosAgendamento.clienteTelefone ? dadosAgendamento.clienteTelefone.replace(/\D/g, '') : '';
-
-            // 4. Cria a mensagem personalizada
-            const mensagem = `Olá ${dadosAgendamento.clienteNome}, aqui é do *Studio Mônica Camargo*! ✨%0APassando para confirmar seu agendamento:%0A%0A🗓️ *Data:* ${dataFmt}%0A⏰ *Horário:* ${dadosAgendamento.hora}h%0A💅 *Serviço:* ${dadosAgendamento.servico}%0A%0AEstamos te aguardando! 😊`;
-
-            // 5. Abre o WhatsApp (se houver telefone cadastrado)
-            if(telLimpo) {
-                window.open(`https://wa.me/55${telLimpo}?text=${mensagem}`, '_blank');
-            } else {
-                alert("Agendamento confirmado! (Cliente sem telefone cadastrado para envio automático)");
-            }
-            
-            carregarAgenda(); // Atualiza a tabela na tela
-        }
-    } catch (error) {
-        console.error("Erro ao confirmar:", error);
-        alert("Erro ao processar confirmação.");
+    window.criarCaixaBloqueio = () => {
+        const container = document.getElementById('box-bloqueio-container');
+        if(!container) return;
+        container.innerHTML = `
+            <div class="manual-box" style="border-color: var(--red); background: rgba(255, 77, 77, 0.03);">
+                <h3 class="section-title" style="margin-top:0; color: var(--red); border-color: var(--red);">Bloquear Agenda</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom:15px;">
+                    <div><label class="label-mini">Data</label><input type="date" id="bloqueio-data" class="custom-input" onchange="atualizarHorariosBloqueio()"></div>
+                    <div><label class="label-mini">Início</label><select id="bloqueio-hora-ini" class="custom-input"></select></div>
+                </div>
+                <label class="label-mini">Quanto tempo bloquear?</label>
+                <select id="bloqueio-duracao" class="custom-input" style="margin-bottom:15px;">
+                    <option value="60">1 hora</option><option value="120">2 horas</option><option value="180">3 horas</option><option value="1440">O DIA TODO (Folga)</option>
+                </select>
+                <button onclick="salvarBloqueio()" style="width:100%; background:var(--red); color:white; padding:12px; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">EFETUAR BLOQUEIO</button>
+            </div>`;
     }
-};
 
-        window.removerItem = async (id, colecao) => {
-            if(confirm("Excluir permanentemente?")) {
-                await deleteDoc(doc(db, colecao, id));
-                colecao === 'agendamentos' ? carregarAgenda() : carregarServicos();
+    window.salvarBloqueio = async () => {
+        const data = document.getElementById('bloqueio-data').value;
+        const hora = document.getElementById('bloqueio-hora-ini').value;
+        const duracao = document.getElementById('bloqueio-duracao').value;
+        if(!data || !hora) return Toast.fire({ icon: 'error', title: 'Escolha data e hora!' });
+        await addDoc(collection(db, "agendamentos"), { clienteNome: "🚫 BLOQUEIO", servicos: ["FOLGA/BLOQUEIO"], data: data, hora: hora, tempoTotal: parseInt(duracao), status: "Confirmado" });
+        Swal.fire({ icon: 'success', title: 'Bloqueado!', text: 'Horário indisponível na agenda.', confirmButtonText: 'OK' });
+        carregarAgenda();
+    };
+
+    window.salvarAgendamentoManual = async () => {
+        const nome = document.getElementById('manual-nome').value;
+        const data = document.getElementById('manual-data').value;
+        const hora = document.getElementById('manual-hora-select').value;
+        const marcados = document.querySelectorAll('input[name="servico-manual"]:checked');
+        if(!nome || !data || !hora || marcados.length === 0) return Toast.fire({ icon: 'warning', title: 'Preencha todos os campos!' });
+        let s = []; let t = 0; marcados.forEach(m => { s.push(m.value); t += parseInt(m.dataset.tempo); });
+        await addDoc(collection(db, "agendamentos"), { clienteNome: nome, servicos: s, data: data, hora: hora, tempoTotal: t, status: "Pendente" });
+        Swal.fire({ icon: 'success', title: 'Agendado!', text: 'Cliente cadastrada com sucesso.', timer: 2000 });
+        carregarAgenda();
+    };
+
+    window.confirmarAgendamentoEEnviarZap = async (id) => {
+        try {
+            const docRef = doc(db, "agendamentos", id);
+            const snapshot = await getDoc(docRef);
+            if (snapshot.exists()) {
+                const dados = snapshot.data();
+                const nomeCli = dados.clienteNome || dados.nome;
+                let foneRaw = dados.telefone || "";
+                if (!foneRaw || foneRaw.length < 8) {
+                    const qClientes = query(collection(db, "clientes"), where("nome", "==", nomeCli));
+                    const snapClientes = await getDocs(qClientes);
+                    snapClientes.forEach(docC => { foneRaw = docC.data().telefone; });
+                }
+                const foneLimpo = foneRaw ? foneRaw.replace(/\D/g, '') : "";
+                if (foneLimpo.length >= 10) {
+                    const dataFmt = dados.data ? dados.data.split('-').reverse().join('/') : "--/--/--";
+                    const horaCli = dados.hora || "--:--";
+                    let servs = Array.isArray(dados.servicos) ? dados.servicos.join(", ") : (dados.servico || "Serviço");
+                    const t = parseInt(dados.tempoTotal || 60);
+                    const tempoFmt = t >= 60 ? Math.floor(t/60) + "h" + (t%60 > 0 ? (t%60)+"min" : "") : t + "min";
+                    const textoMensagem = `CONFIRMAÇÃO DE AGENDAMENTO\n\nOlá, ${nomeCli}! Passando para confirmar seu horário no *Studio Mônica Camargo*. \n\nDATA: ${dataFmt}\nHORÁRIO: ${horaCli}h\nSERVIÇOS: ${servs}\nDURAÇÃO: ~${tempoFmt}\n\nEstamos ansiosas para te ver!`;
+                    await updateDoc(docRef, { status: "Confirmado" });
+                    window.open(`https://wa.me/55${foneLimpo}?text=${encodeURIComponent(textoMensagem)}`, '_blank');
+                    Toast.fire({ icon: 'success', title: 'WhatsApp aberto!' });
+                } else {
+                    await updateDoc(docRef, { status: "Confirmado" });
+                    Toast.fire({ icon: 'warning', title: 'Confirmado (sem telefone)' });
+                }
+                carregarAgenda();
             }
-        };
-    </script>
+        } catch (e) { console.error(e); }
+    };
+
+    window.cancelarAtendimento = async (id) => {
+        Swal.fire({ title: 'Cancelar?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Sim' }).then(async (r) => {
+            if (r.isConfirmed) { await updateDoc(doc(db, "agendamentos", id), { status: "Cancelado" }); carregarAgenda(); }
+        });
+    };
+
+    window.removerItem = async (id, col) => {
+        Swal.fire({ title: 'Excluir?', icon: 'error', showCancelButton: true }).then(async (r) => {
+            if (r.isConfirmed) { await deleteDoc(doc(db, col, id)); col === 'agendamentos' ? carregarAgenda() : carregarServicos(); }
+        });
+    };
+
+    window.addLinhaItem = (id) => {
+        const div = document.createElement('div'); div.className = 'row-item'; div.style = "display:flex; gap:5px; margin-bottom:5px; align-items:center;";
+        div.innerHTML = `<input type="text" placeholder="Serviço" class="custom-input" style="flex:2"><input type="text" placeholder="R$" class="custom-input" style="flex:1"><input type="text" placeholder="Min" class="custom-input" style="flex:1"><div style="display:flex; flex-direction:column; align-items:center; gap:2px;"><label style="font-size:8px; color:var(--gold)">VAR?</label><input type="checkbox" class="var-check"></div><button class="btn-action btn-del" style="width:30px; height:30px;" onclick="this.parentElement.remove()">✘</button>`;
+        document.getElementById(id).appendChild(div);
+    };
+
+    async function carregarServicos() {
+        const grid = document.getElementById('grid-servicos');
+        const snap = await getDocs(collection(db, "categorias_servicos"));
+        const btnAdd = grid.lastElementChild;
+        grid.innerHTML = "";
+        snap.forEach(documento => {
+            const cat = documento.data();
+            const card = document.createElement('div'); card.className = 'edit-card';
+            card.innerHTML = `<button onclick="removerItem('${documento.id}', 'categorias_servicos')" style="position:absolute; top:10px; right:10px; background:none; border:none; color:var(--red); cursor:pointer; font-size:18px;">🗑</button><label class="label-mini">Categoria</label><input type="text" id="name-${documento.id}" value="${cat.nome}" class="custom-input" style="margin-bottom:10px; padding-right:40px;"><div id="container-${documento.id}">${(cat.itens || []).map(item => `<div class="row-item" style="display:flex; gap:5px; margin-bottom:5px; align-items:center;"><input type="text" value="${item.nome}" class="custom-input" style="flex:2"><input type="text" value="${item.preco}" class="custom-input" style="flex:1"><input type="text" value="${item.tempo || ''}" class="custom-input" style="flex:1"><div style="display:flex; flex-direction:column; align-items:center; gap:2px;"><label style="font-size:8px; color:var(--gold)">VAR?</label><input type="checkbox" class="var-check" ${item.isVariavel ? 'checked' : ''}></div><button class="btn-action btn-del" style="width:30px; height:30px;" onclick="this.parentElement.remove()">✘</button></div>`).join('')}</div><button class="btn-add-sub" onclick="addLinhaItem('container-${documento.id}')">+ Adicionar Item</button><button class="btn-save" onclick="salvarCategoria('${documento.id}')">SALVAR CATEGORIA</button>`;
+            grid.appendChild(card);
+        });
+        grid.appendChild(btnAdd);
+    }
+
+    async function carregarServicosNoManual() {
+        const container = document.getElementById('manual-servicos-container');
+        const snap = await getDocs(collection(db, "categorias_servicos"));
+        container.innerHTML = "";
+        snap.forEach(docSnap => { (docSnap.data().itens || []).forEach(item => { container.innerHTML += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:12px;"><input type="checkbox" name="servico-manual" value="${item.nome}" data-tempo="${item.tempo || 60}" onchange="atualizarHorariosDisponiveis()"> ${item.nome} (${item.tempo || 60} min)</div>`; }); });
+    }
+
+    async function carregarClientes() {
+        const tbody = document.getElementById('lista-clientes');
+        const snap = await getDocs(collection(db, "clientes"));
+        tbody.innerHTML = "";
+        snap.forEach(docSnap => { const u = docSnap.data(); const tel = u.telefone ? u.telefone.replace(/\D/g, '') : ''; tbody.innerHTML += `<tr><td>${u.nome}</td><td>${u.telefone}</td><td><a href="https://wa.me/55${tel}" target="_blank" style="background:#25d366; color:white; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:12px;">WhatsApp</a></td></tr>`; });
+    }
+
+    window.adicionarNovaCategoria = async () => { const id = "cat_" + Date.now(); await setDoc(doc(db, "categorias_servicos", id), { nome: "Nova Categoria", itens: [] }); carregarServicos(); };
+    window.switchTab = (tab) => { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(tab).classList.add('active'); if(event) event.currentTarget.classList.add('active'); };
+    function convMin(h) { if(!h) return 0; const [hrs, min] = h.split(':').map(Number); return hrs * 60 + (min || 0); }
+    window.atualizarHorariosBloqueio = () => {
+        const select = document.getElementById('bloqueio-hora-ini');
+        if(select) { select.innerHTML = '<option value="">Início</option>'; horariosBase.forEach(h => { select.innerHTML += `<option value="${h}">${h}h</option>`; }); }
+    };
+</script>
 </body>
 </html>

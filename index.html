@@ -31,7 +31,6 @@
         .menu-btn-close { align-self: flex-end; font-size: 30px; color: #d4af37; cursor: pointer; }
         .menu-sidebar a { color: #fff; text-decoration: none; font-size: 16px; padding: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); transition: 0.3s; }
         .menu-sidebar a:hover { color: #d4af37; padding-left: 15px; }
-        .menu-admin { color: #ffffff !important; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 999; }
         .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
         .hamburger span { width: 30px; height: 3px; background-color: #d4af37; border-radius: 2px; }
@@ -43,6 +42,7 @@
         .price-list { text-align: left; margin: 20px 0; color: #ccc; }
         .price-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
         .price-value { color: #d4af37; font-weight: bold; }
+        .time-info { font-size: 12px; color: #888; margin-top: 2px; }
 
         :root { --gold-main: #d4af37; --gold-light: #f5e6a8; --gold-strong: #b8860b; --bg-overlay: rgba(0, 0, 0, 0.8); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -56,9 +56,12 @@
         main { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
         .welcome-text h2 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold-main); }
         .section-title { margin-top: 40px; margin-bottom: 20px; border-left: 4px solid var(--gold-main); padding-left: 15px; text-transform: uppercase; letter-spacing: 2px; font-size: 18px; }
+        
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 50px; }
         .service-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border: 1px solid rgba(212, 175, 55, 0.2); padding: 25px; border-radius: 15px; text-align: center; transition: 0.4s; cursor: pointer; }
-        .price { display: block; font-weight: bold; color: var(--gold-main); font-size: 18px; margin-bottom: 15px; }
+        .service-card:hover { border-color: var(--gold-main); transform: translateY(-5px); }
+        .price { display: block; font-weight: bold; color: var(--gold-main); font-size: 18px; margin-bottom: 5px; }
+        .service-duration-badge { font-size: 12px; color: #aaa; text-transform: lowercase; }
 
         .booking-container { background: rgba(15, 15, 15, 0.9); border: 1px solid var(--gold-main); padding: 30px; border-radius: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         @media (max-width: 768px) { .booking-container { grid-template-columns: 1fr; } }
@@ -68,17 +71,14 @@
         .service-item-check input { margin-right: 12px; accent-color: var(--gold-main); width: 18px; height: 18px; }
         .resumo-sessao { background: rgba(212, 175, 55, 0.1); border-left: 3px solid var(--gold-main); padding: 10px; border-radius: 5px; margin-bottom: 20px; font-size: 13px; }
         
-        /* AJUSTE COR DA DATA - AGORA BRANCA */
         .booking-form select, .booking-form input { 
             width: 100%; padding: 12px; background: #000; border: 1px solid rgba(212, 175, 55, 0.5); 
             border-radius: 8px; color: #ffffff !important; margin-bottom: 20px; outline: none; 
         }
-        /* Ajuste específico para o ícone do calendário em alguns navegadores */
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
         .btn-confirm { width: 100%; padding: 15px; background: linear-gradient(45deg, var(--gold-strong), var(--gold-main)); border: none; border-radius: 8px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
         
-        /* ESTILO DO LINK DO WHATSAPP */
         .wpp-link { color: #d4af37; text-decoration: none; font-weight: bold; }
         .wpp-link:hover { text-decoration: underline; }
     </style>
@@ -93,7 +93,7 @@
         <a href="#servicos">Nossos Serviços</a>
         <a href="#agendar">Agendar Horário</a>
         <a href="compromiso.html">Meus Agendamentos</a>
-        <a href="adm.login.html" class="menu-admin">Administração</a>
+        <a href="adm.login.html">Administração</a>
         <a href="login.html" id="linkLoginSidebar">Fazer Login</a>
         <a href="#" id="linkSair" onclick="fazerLogout()" style="color: #ff4d4d; border-top: 1px solid rgba(255,0,0,0.2); margin-top: 20px; display: none;">Sair</a>
     </div>
@@ -125,39 +125,72 @@
         </div>
     </header>
 
-    <main>
+ <main>
+
         <section class="welcome-text">
+
             <h2>Sua beleza, nossa arte.</h2>
+
             <p>Escolha o serviço desejado e agende seu momento de cuidado.</p>
+
         </section>
 
+
+
         <h3 class="section-title" id="servicos">Nossos Serviços</h3>
+
         <div class="services-grid" id="gridServicosHome"></div>
 
+
+
         <h3 class="section-title" id="agendar">Agende um Horário</h3>
+
         <div class="booking-container">
+
             <div class="booking-form">
+
                 <label>Selecione os Serviços</label>
+
                 <div id="listaServicosCheck" class="services-check-list">Carregando...</div>
+
                 <div id="resumoAgendamento" class="resumo-sessao">Total: R$ 0,00 | Tempo: 0 min</div>
 
+
+
                 <label>Escolha a Data</label>
+
                 <input type="date" id="dataSelecionada">
 
+
+
                 <label>Melhor Horário</label>
+
                 <select id="horarioSelecionado"><option>Selecione uma data primeiro</option></select>
 
+
+
                 <div id="containerBotaoAgendamento">
+
                     <button class="btn-confirm" onclick="window.location.href='login.html'" style="color:#000">Fazer login para agendar</button>
+
                 </div>
+
             </div>
 
+
+
             <div style="color: #ccc; font-size: 14px; line-height: 1.6;">
+
                 <p>📞 <strong>WhatsApp: </strong><a href="https://wa.me/5511974688863" target="_blank" class="wpp-link">(11) 97468-8863</a></p>
+
                 <p>⏰ <strong>Horário:</strong> Segunda a Sábado, 07h às 19h.</p>
+
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d914.5000656310609!2d-46.9284041303783!3d-23.53249296910587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf042725f2e5cd%3A0x34c6ae739553e4d2!2sR.%20Astral%2C%2098%20-%20Parque%20Boa%20Esperanca%2C%20Itapevi%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1770680592999!5m2!1spt-BR!2sbr" width="100%" height="250" style="border:0; border-radius:10px; margin-top: 15px;" allowfullscreen="" loading="lazy"></iframe>
+
             </div>
+
         </div>
+
     </main>
 
     <script type="module">
@@ -181,38 +214,87 @@
         let usuarioLogado = null;
         let servicosSelecionados = [];
 
-        function mostrarAlerta(msg) {
+        window.mostrarAlerta = function(msg) {
             const box = document.getElementById('meuAlerta');
-            box.innerText = msg; box.style.display = 'block';
-            setTimeout(() => { box.style.display = 'none'; }, 3000);
-        }
+            if(box) { box.innerText = msg; box.style.display = 'block'; setTimeout(() => { box.style.display = 'none'; }, 3000); }
+        };
 
         async function carregarServicosDinamicos() {
-            const grid = document.getElementById('gridServicosHome');
-            const listaCheck = document.getElementById('listaServicosCheck');
-            const snap = await getDocs(collection(db, "categorias_servicos"));
-            grid.innerHTML = ""; listaCheck.innerHTML = "";
-            snap.forEach(docSnap => {
-                const cat = docSnap.data();
-                const card = document.createElement('div'); card.className = 'service-card';
-                let htmlModal = cat.itens.map(i => `<div class='price-item'><span>${i.nome}</span><span class='price-value'>R$ ${i.preco}</span></div>`).join('');
-                card.onclick = () => openModal(cat.nome, htmlModal);
-                card.innerHTML = `<h3>${cat.nome}</h3><p>Toque para ver detalhes</p><span class="price">Ver opções</span>`;
-                grid.appendChild(card);
-                cat.itens.forEach(item => {
-                    const label = document.createElement('label'); label.className = 'service-item-check';
-                    label.innerHTML = `<input type="checkbox" value="${item.nome}" data-preco="${item.preco}" data-tempo="${item.tempo || 30}"> ${item.nome} (R$ ${item.preco})`;
-                    label.querySelector('input').addEventListener('change', calcTotal);
-                    listaCheck.appendChild(label);
+            try {
+                const grid = document.getElementById('gridServicosHome');
+                const listaCheck = document.getElementById('listaServicosCheck');
+                const snap = await getDocs(collection(db, "categorias_servicos"));
+                grid.innerHTML = ""; listaCheck.innerHTML = "";
+                
+                snap.forEach(docSnap => {
+                    const cat = docSnap.data();
+                    if(!cat.itens) return;
+
+                    const card = document.createElement('div'); card.className = 'service-card';
+                    
+                    let htmlModal = cat.itens.map(i => {
+                        const tempoTexto = i.tempo ? `${i.tempo} min` : "30 min";
+                        const eVariavel = i.isVariavel === true || i.isVariavel === "true";
+                        const precoExibicao = eVariavel 
+                            ? `<a href="https://wa.me/5511974688863?text=Olá Mônica! Quero consultar o valor do serviço: ${i.nome}" target="_blank" style="color: #d4af37; text-decoration: underline;">Consultar Preço</a>` 
+                            : `R$ ${i.preco || '0,00'}`;
+
+                        return `
+                            <div class='price-item' style='flex-direction: column; align-items: flex-start; padding: 12px 0;'>
+                                <div style='display: flex; justify-content: space-between; width: 100%;'>
+                                    <span>${i.nome}</span>
+                                    <span class='price-value'>${precoExibicao}</span>
+                                </div>
+                                <span class='time-info'>⏱ Duração média: ${tempoTexto}</span>
+                            </div>`;
+                    }).join('');
+
+                    card.onclick = () => window.openModal(cat.nome, htmlModal);
+                    
+                    card.innerHTML = `
+                        <h3>${cat.nome}</h3>
+                        <p style="margin: 10px 0; font-size: 13px; color: #ccc;">Veja nossos serviços de ${cat.nome}</p>
+                        <span class="price">Ver opções</span>
+                    `;
+                    grid.appendChild(card);
+                    
+                    cat.itens.forEach(item => {
+                        const label = document.createElement('label'); 
+                        label.className = 'service-item-check';
+                        const eVariavelCheck = item.isVariavel === true || item.isVariavel === "true";
+                        const precoNoCheck = eVariavelCheck ? "Consultar" : `R$ ${item.preco || '0,00'}`;
+                        
+                        label.innerHTML = `
+                            <input type="checkbox" value="${item.nome}" 
+                                   data-preco="${item.preco || 0}" 
+                                   data-tempo="${item.tempo || 30}"
+                                   data-isvar="${eVariavelCheck ? 'sim' : 'nao'}"> 
+                            ${item.nome} (${precoNoCheck})`;
+                        
+                        label.querySelector('input').addEventListener('change', window.calcTotal);
+                        listaCheck.appendChild(label);
+                    });
                 });
-            });
+                document.getElementById("loader").classList.add("loader-hidden");
+            } catch (e) {
+                console.error(e);
+                document.getElementById("loader").classList.add("loader-hidden");
+            }
         }
 
-        function calcTotal() {
+        window.calcTotal = function() {
             const checks = document.querySelectorAll('#listaServicosCheck input:checked');
-            let p = 0; let t = 0; servicosSelecionados = [];
-            checks.forEach(c => { p += parseFloat(c.dataset.preco); t += parseInt(c.dataset.tempo); servicosSelecionados.push(c.value); });
-            document.getElementById('resumoAgendamento').innerHTML = `Total: R$ ${p.toFixed(2)} | Tempo Est.: ${t} min`;
+            let p = 0; let t = 0; let temVar = false;
+            servicosSelecionados = [];
+            checks.forEach(c => { 
+                p += parseFloat(c.dataset.preco) || 0; 
+                t += parseInt(c.dataset.tempo) || 0; 
+                servicosSelecionados.push(c.value); 
+                if(c.dataset.isvar === 'sim') temVar = true;
+            });
+            let txtTotal = `R$ ${p.toFixed(2)}`;
+            if(temVar) txtTotal += " + Consultar";
+            document.getElementById('resumoAgendamento').innerHTML = `Total: ${txtTotal} | Tempo Est.: ${t} min`;
         }
 
         document.getElementById('dataSelecionada').addEventListener('change', async function() {
@@ -220,27 +302,26 @@
             const selectHora = document.getElementById('horarioSelecionado');
             if (!dataEscolhida) return;
 
-            const dataObj = new Date(dataEscolhida + 'T00:00:00');
-            if (dataObj.getDay() === 0) { mostrarAlerta("❌ Não atendemos aos domingos!"); this.value = ""; return; }
+            let tempoNecessario = 0;
+            document.querySelectorAll('#listaServicosCheck input:checked').forEach(c => { tempoNecessario += parseInt(c.dataset.tempo); });
+            if (tempoNecessario === 0) { window.mostrarAlerta("⚠️ Escolha os serviços primeiro."); this.value = ""; return; }
 
+            const dataObj = new Date(dataEscolhida + 'T00:00:00');
+            if (dataObj.getDay() === 0) { window.mostrarAlerta("❌ Não atendemos aos domingos!"); this.value = ""; return; }
+            
             selectHora.innerHTML = "<option>Verificando disponibilidade...</option>";
             const q = query(collection(db, "agendamentos"), where("data", "==", dataEscolhida));
             const querySnap = await getDocs(q);
+            const ocupados = new Set();
             
-            const horariosOcupados = new Set();
-
             querySnap.forEach(docSnap => {
-                const agendamento = docSnap.data();
-                if (agendamento.status !== "Cancelado") {
-                    let [h, m] = agendamento.hora.split(':').map(Number);
-                    let minutosInicio = h * 60 + m;
-                    let duracao = agendamento.tempoTotal || 30;
-
-                    for (let i = 0; i < duracao; i += 30) {
-                        let mTotal = minutosInicio + i;
-                        let hBloq = Math.floor(mTotal / 60).toString().padStart(2, '0');
-                        let mBloq = (mTotal % 60).toString().padStart(2, '0');
-                        horariosOcupados.add(`${hBloq}:${mBloq}`);
+                const ag = docSnap.data();
+                if (ag.status !== "Cancelado") {
+                    let [h, m] = ag.hora.split(':').map(Number);
+                    let minIni = h * 60 + m;
+                    for (let i = 0; i < (ag.tempoTotal || 30); i += 30) {
+                        let mTotal = minIni + i;
+                        ocupados.add(`${Math.floor(mTotal/60).toString().padStart(2,'0')}:${(mTotal%60).toString().padStart(2,'0')}`);
                     }
                 }
             });
@@ -248,13 +329,19 @@
             selectHora.innerHTML = "";
             const agora = new Date(); const hojeStr = agora.toISOString().split('T')[0];
             for (let h = 7; h <= 18; h++) {
-                [0, 30].forEach(m => {
-                    let hh = h.toString().padStart(2, '0'); let mm = m.toString().padStart(2, '0');
-                    let horaCheck = `${hh}:${mm}`;
-                    if (dataEscolhida === hojeStr && (h < agora.getHours() || (h === agora.getHours() && m <= agora.getMinutes()))) return;
-                    if (horariosOcupados.has(horaCheck)) return;
-                    selectHora.innerHTML += `<option value="${horaCheck}">${horaCheck}</option>`;
-                });
+                for (let m of [0, 30]) {
+                    let hCheck = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+                    let minCheck = h * 60 + m;
+                    if (dataEscolhida === hojeStr && minCheck <= (agora.getHours()*60 + agora.getMinutes())) continue;
+                    let cabe = true;
+                    for (let o = 0; o < tempoNecessario; o += 30) {
+                        let mVer = minCheck + o;
+                        let hV = Math.floor(mVer/60).toString().padStart(2,'0');
+                        let mV = (mVer%60).toString().padStart(2,'0');
+                        if (ocupados.has(`${hV}:${mV}`)) { cabe = false; break; }
+                    }
+                    if (cabe) selectHora.innerHTML += `<option value="${hCheck}">${hCheck}</option>`;
+                }
             }
         });
 
@@ -272,37 +359,51 @@
         async function salvarAgendamento() {
             const data = document.getElementById('dataSelecionada').value;
             const hora = document.getElementById('horarioSelecionado').value;
-            
-            let tempoTotalAgendamento = 0;
-            const checks = document.querySelectorAll('#listaServicosCheck input:checked');
-            checks.forEach(c => { tempoTotalAgendamento += parseInt(c.dataset.tempo); });
-
-            if (servicosSelecionados.length === 0 || !data || !hora) { mostrarAlerta("⚠️ Escolha os serviços e o horário."); return; }
+            if (servicosSelecionados.length === 0 || !data || !hora) { window.mostrarAlerta("⚠️ Escolha os serviços e o horário."); return; }
             try {
+                const userDoc = await getDoc(doc(db, "clientes", usuarioLogado.uid));
+                let dCli = userDoc.exists() ? userDoc.data() : { nome: "Cliente", telefone: "" };
+                let tTotal = 0;
+                document.querySelectorAll('#listaServicosCheck input:checked').forEach(c => { tTotal += parseInt(c.dataset.tempo); });
                 await addDoc(collection(db, "agendamentos"), {
-                    clienteUid: usuarioLogado.uid,
-                    servicos: servicosSelecionados,
-                    data: data, hora: hora, tempoTotal: tempoTotalAgendamento,
-                    status: "Pendente", criadoEm: serverTimestamp()
+                    clienteUid: usuarioLogado.uid, clienteNome: dCli.nome, clienteTelefone: dCli.telefone,
+                    servico: servicosSelecionados.join(", "), servicos: servicosSelecionados,
+                    data, hora, tempoTotal: tTotal, status: "Pendente", criadoEm: serverTimestamp()
                 });
-                mostrarAlerta("✅ Agendamento solicitado! Aguarde nossa confirmação.");
-                setTimeout(() => { location.reload(); }, 3000);
-            } catch (e) { mostrarAlerta("❌ Erro ao agendar."); }
+                window.mostrarAlerta("✅ Agendamento solicitado! Aguarde nossa confirmação.");
+                setTimeout(() => location.reload(), 3000);
+            } catch (e) { window.mostrarAlerta("❌ Erro ao agendar."); }
         }
-
+        
         window.fazerLogout = () => signOut(auth).then(() => location.reload());
         carregarServicosDinamicos();
     </script>
 
     <script>
-        window.addEventListener("load", () => setTimeout(() => document.getElementById("loader").classList.add("loader-hidden"), 800));
-        const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menuOverlay');
-        document.getElementById('openMenu').onclick = () => { sidebar.classList.add('active'); overlay.style.display = 'block'; };
-        document.getElementById('closeMenu').onclick = closeSide; overlay.onclick = closeSide;
-        function closeSide() { sidebar.classList.remove('active'); overlay.style.display = 'none'; }
-        function openModal(t, c) { document.getElementById('modalTitle').innerText = t; document.getElementById('modalBody').innerHTML = c; document.getElementById('serviceModal').style.display = 'flex'; }
-        document.getElementById('closeModal').onclick = () => document.getElementById('serviceModal').style.display = 'none';
-        function closeModalAndGo() { document.getElementById('serviceModal').style.display = 'none'; document.getElementById('agendar').scrollIntoView(); }
+        // Funções de interface global
+        window.openModal = function(t, c) { 
+            document.getElementById('modalTitle').innerText = t; 
+            document.getElementById('modalBody').innerHTML = c; 
+            document.getElementById('serviceModal').style.display = 'flex'; 
+        }
+        window.closeSide = function() { 
+            document.getElementById('sidebar').classList.remove('active'); 
+            document.getElementById('menuOverlay').style.display = 'none'; 
+        }
+        window.closeModalAndGo = function() { 
+            document.getElementById('serviceModal').style.display = 'none'; 
+            document.getElementById('agendar').scrollIntoView(); 
+        }
+
+        document.getElementById('openMenu').onclick = () => { 
+            document.getElementById('sidebar').classList.add('active'); 
+            document.getElementById('menuOverlay').style.display = 'block'; 
+        };
+        document.getElementById('closeMenu').onclick = window.closeSide;
+        document.getElementById('menuOverlay').onclick = window.closeSide;
+        document.getElementById('closeModal').onclick = () => { 
+            document.getElementById('serviceModal').style.display = 'none'; 
+        };
     </script>
 </body>
 </html>
